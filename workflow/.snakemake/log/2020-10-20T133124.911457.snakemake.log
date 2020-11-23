@@ -1,0 +1,3 @@
+WorkflowError in line 4 of /scratch/nchris5/HCP_template_piriform_segmentations/diffparc-smk/workflow/Snakefile:
+Config file config/config.yml not found.
+  File "/scratch/nchris5/HCP_template_piriform_segmentations/diffparc-smk/workflow/Snakefile", line 4, in <module>

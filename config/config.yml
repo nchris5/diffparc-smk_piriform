@@ -1,0 +1,71 @@
+
+participants_tsv: 'config/participants.tsv'
+
+
+#singularity containers:
+singularity_neuroglia: /project/6007967/akhanf/singularity/bids-apps/khanlab_neuroglia-core_latest.sif 
+singularity_cuda: /project/6050199/akhanf/singularity/bids-apps/fsl_6.0.4_cuda9.1.sif
+
+template_prob_seg: 
+  rpiriform: '/scratch/nchris5/HCP_template_piriform_segmentations/snakeBigBrainSeg_to_HCPSubjectSpaceSeg/results/Right_piriform_segmentation_BigBrain_to_HCPtemplate_POSTlabeltolabelReg/BigBrainSeg_Label-5_in_HCPtemplateSegSpace07mm_SmoothedFWHM_Downsampled.nii.gz'
+#  lpiriform: '/scratch/nchris5/HCP_template_piriform_segmentations/snakeBigBrainSeg_to_HCPSubjectSpaceSeg/results/Left_piriform_segmentation_BigBrain_to_HCPtemplate_POSTlabeltolabelReg/BigBrainSeg_Label-5_in_HCPtemplateSegSpace07mm_SmoothedFWHM_Downsampled.nii.gz'
+
+#to apply to masks in target space before tracking, and template-space before grouping..
+prob_seg_threshold: 0.5
+
+
+template: hcp7Tsubj
+ants_affine_mat: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7Tsubj_07mm/results/iter_1/sub-{subject}_0GenericAffine.mat
+ants_invwarp_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7Tsubj_07mm/results/iter_1/sub-{subject}_1InverseWarp.nii.gz
+ants_warp_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7Tsubj_07mm/results/iter_1/sub-{subject}_1Warp.nii.gz
+ants_ref_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7Tsubj_07mm/results/iter_1/template_T1w.nii.gz
+
+#list of ROIs in target segmentations 
+targets_txt: resources/hcp_mmp_sym_180.txt
+
+#bedpost
+###fsl_bedpost_dir: /project/6007967/akhanf/projects/hcp/HCP_1200_T1w_Diffusion_FS
+###bedpost_mean_s0_samples: '{subject}/T1w/Diffusion.bedpostX/mean_S0samples.nii.gz'
+###bedpost_merged_prefix: '{subject}/T1w/Diffusion.bedpostX/merged'
+
+#maximum number of clusters in spectral clustering
+# will perform with k=range(2,max_k+1)
+max_k: 4
+
+
+#tractography parameters
+probtrack:
+    seed_resolution: 1.0
+    nsamples: 10000
+    opts: '--loopcheck --onewaycondition --cthr=0.2 --nsteps=2000 --steplength=0.5  --fibthresh=0.01 --distthresh=0.0 --sampvox=0.0 --forcedir --opd --os2t --randfib=2' 
+
+probtrack_tractmap:
+    seed_resolution: 0.5
+    nsamples: 2000
+    opts: '--loopcheck --onewaycondition --cthr=0.2 --nsteps=2000 --steplength=0.5  --fibthresh=0.01 --distthresh=0.0 --sampvox=0.0 --forcedir --opd --randfib=2'
+
+#---- for subworkflow: hcp_mmp_to_native ----"
+singularity_freesurfer: /project/6050199/akhanf/singularity/bids-apps/khanlab_freesurfer_v6.0.1-subfields.img
+singularity_connectome_workbench: /project/6007967/software/transparentsingularity/connectome-workbench_1.4.1_20191117.simg/connectome-workbench_1.4.1_20191117.simg 
+
+#path to your freesurfer license file:
+fs_license: /project/6050199/akhanf/opt/freesurfer/.license
+
+#path to subject freesurfer dir (containing surf/ and mri/ subfolders) 
+# use the {subject} wildcard here.. 
+in_freesurfer: /scratch/nchris5/HCP_template_piriform_segmentations/HCP_1200_freesurfer_unzipped/{subject}
+
+
+
+
+#---- unused currently, need to create bedpost gpu rule --- "
+dwi_preproc_dir: /project/6007967/akhanf/projects/hcp/HCP_1200_T1w_Diffusion_FS
+#paths relative to dwi_preproc_dir - needs to be preprocessed dwi in T1w space
+in_dwi_nii: '{subject}/T1w/Diffusion_7T/data.nii.gz'
+in_dwi_bval: '{subject}/T1w/Diffusion_7T/bvals'
+in_dwi_bvec: '{subject}/T1w/Diffusion_7T/bvecs'
+in_dwi_grad_dev: '{subject}/T1w/Diffusion_7T/grad_dev.nii.gz'
+in_dwi_mask_nii: '{subject}/T1w/Diffusion_7T/nodif_brain_mask.nii.gz'
+
+
+
