@@ -127,7 +127,7 @@ All edges tables require at minimum of two columns: “Source” and “Target�
 1.  At this point, you can move to the “Overview” tab and visualize the
     network with its default settings. As viewed in the example below:
 
-    ![](C:\Users\nickc\Desktop\Conferences)
+    ![](C:\Users\nickc\Desktop\Conferences\Gephi_github_image_initial_unprocessed_network.png)
 
 2.  In the toolbar at the bottom, click the Dark “T” to show the
     node labels. The leftmost slider bar controls viewing size of the
