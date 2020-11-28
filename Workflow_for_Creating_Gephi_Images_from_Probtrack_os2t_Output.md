@@ -227,6 +227,6 @@ b)  The node size may also be changed by selecting the second icon on
 
 -   This yields the final output below:
 
-![Gephi_Circular_Laylout_Colour_Change_Seed_Size_Filter_>10%Connectivity_Save_Final_fig_Edit_in_ppt](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image7_Gephi_example.png)
+![Gephi_Circular_Laylout_Colour_Change_Seed_Size_Filter_>10%Connectivity_Save_Final_fig_Edit_in_ppt](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image8_Gephi_example.png)
 
 
