@@ -170,7 +170,7 @@ b)  The node size may also be changed by selecting the second icon on
     tab (TT), selecting ranking, and selecting Degree as this attribute.
     I have used Min=1 and Max=1.2 in the below example.
 
-![Gephi_Circular_Laylour_Colour_Change_Seed_Size](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image3_Gephi_example.png)
+![Gephi_Circular_Laylour_Colour_Change_Seed_Size](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image4_Gephi_example.png)
 
 ## Step 4) Filtering the Graph:
     
