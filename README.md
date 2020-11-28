@@ -54,28 +54,14 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 #### Step 2: Configure workflow
 Configure the workflow according to your needs via editing the files in the config/ folder. Adjust config.yml to configure the workflow execution, and participants.tsv to specify your subjects.
 
-#### Step 3: Install Snakemake
-Install Snakemake using conda:
-
-```
-conda create -c bioconda -c conda-forge -n snakemake snakemake
-```
+#### Step 3: Install and Activate Snakemake
+Install Snakemake using conda: ```conda create -c bioconda -c conda-forge -n snakemake snakemake```
 For installation details, see the instructions in the Snakemake documentation.
+Activate the conda environment: ```conda activate snakemake``` or add this line into your bash startup
 
 #### Step 4: Execute workflow
-Activate the conda environment:
-
-```
-conda activate snakemake
-```
-Test your configuration by performing a dry-run via
-```
-snakemake --use-conda --use-singularity -n
-```
-Execute the workflow locally via
-```
-snakemake --use-conda --use-singularity --cores $N
-```
+* OptionA)
+Execute the workflow locally via: ```snakemake --use-conda --use-singularity --cores $N```
 using $N cores or run it in a cluster environment via
 ```
 snakemake --use-conda --use-singularity --cluster qsub --jobs 100
