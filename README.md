@@ -4,8 +4,11 @@ Snakemake workflow overview for diffusion-based parcellation of the piriform cor
 1. ```rule hcp7T_Diffusion_bedpostx_gpu```: Generates white matter fibre orientations within each brain voxel for each subject's HCP 7T diffusion data via FSL's ```bedpostx_gpu```. 
 2. ```rule hcp_mmk```: Generates target segmentation 3D nifti volumes (bilateral) from HCP32k surf gifti files (180 regions)
 3. ```rule diffparc_smk```: Resamples the piriform seed/hcp-mmk180_targets-->HCP7TDiffusionResolution and subsequently performs probabilistic tractography from the piriform seed in each subject's space to hcp-mmk180_targets via ```probtrackx2_gpu```
+
     3b. Brings connectivity data for each subject's seed voxels into template and performs spectral clustering on the concatenated feature vectors to parcellate into k regions
+    
     3c. Creates node and edges tables to use as the input to the Gephi software for each of the clustering solutions
+    
 4. ```rule tractmap``` Performs probabilistic tractography on each individual cluster to generate tractography maps for each cluster following spectral clustering (useful for visualization of each cluster's individual connectivity)
 
 ## Inputs in config/config.yml:
