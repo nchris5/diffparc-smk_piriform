@@ -145,8 +145,7 @@ All edges tables require at minimum of two columns: “Source” and “Target�
     (corresponding to 3 seeds in my case). Select Upper Order Count = 3,
     and Order Nodes by “Node ID”. Example of the result provided below:
 
-    ![](media/image2.png){width="5.537814960629921in"
-    height="2.959417104111986in"}
+![Gephi_Circular_Laylour_Unprocessed](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image2_Gephi_example.png)
 
 5.  Now that the primary graph chord has been created, it needs to be
     made more readable.
@@ -159,8 +158,7 @@ a)  The first thing we want to do is color the nodes based on the RGB
     the bottom of the graph toolbar in the overview panel. Simply click
     this icon and the nodes will be colored automatically.
 
-    ![](media/image3.png){width="5.346882108486439in"
-    height="2.8739501312335958in"}
+![Gephi_Circular_Laylour_Colour](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image3_Gephi_example.png)
 
 b)  The node size may also be changed by selecting the second icon on
     the right side of this tab (interweaved circles), selecting ranking,
@@ -172,8 +170,7 @@ b)  The node size may also be changed by selecting the second icon on
     tab (TT), selecting ranking, and selecting Degree as this attribute.
     I have used Min=1 and Max=1.2 in the below example.
 
-    ![](media/image4.png){width="5.3697473753280835in"
-    height="2.880501968503937in"}
+![Gephi_Circular_Laylour_Colour_Change_Seed_Size](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image3_Gephi_example.png)
 
 ## Step 4) Filtering the Graph:
     
@@ -181,7 +178,7 @@ b)  The node size may also be changed by selecting the second icon on
     visually see the most important edge weights since each cluster in
     the center of the circle has 180 edges shown. If for example we only
     want to view the top 5 ranked edges for each cluster, we can filter
-    the graph… In the filters tab within the overview tab, select
+    the graph. In the filters tab within the overview tab, select
     attributesrange, and double click on the attribute you want to
     filter on (in this case we want to filter on rank\_in\_cluster). You
     will see this filter now in the Queries tab below. Since we only
@@ -191,11 +188,7 @@ b)  The node size may also be changed by selecting the second icon on
     to this data. The two images below illustrate the parameters to set
     when filtering, and what the resulting new workspace looks like:
 
-    ![](media/image5.png){width="5.68669072615923in"
-    height="3.0420166229221346in"}
-
-    ![](media/image6.png){width="5.706469816272966in"
-    height="3.0672265966754155in"}
+![Gephi_Circular_Laylout_Colour_Change_Seed_Size_Filter_>10%Connectivity](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image6_Gephi_example.png)
 
 -   You will node that the edge colours are actually a combination of
     the nodes they connect. Don’t worry, this will be resolved when
@@ -220,7 +213,7 @@ b)  The node size may also be changed by selecting the second icon on
 
 5.  Click Export: SVG/PDF/PNG and save as a **pdf**
 
-![](media/image7.png){width="6.5in" height="3.4972222222222222in"}
+![Gephi_Circular_Laylout_Colour_Change_Seed_Size_Filter_>10%Connectivity_Save_Final_fig](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image7_Gephi_example.png)
 
 ## Step 6) Manually Adding in Modularity Class labels:
 
@@ -234,7 +227,6 @@ b)  The node size may also be changed by selecting the second icon on
 
 -   This yields the final output below:
 
-    ![](media/image8.png){width="5.915043744531934in"
-    height="5.8632239720034995in"}
+![Gephi_Circular_Laylout_Colour_Change_Seed_Size_Filter_>10%Connectivity_Save_Final_fig_Edit_in_ppt](https://github.com/nchris5/diffparc-smk_piriform/tree/master/docs/gephi_example_inline_images/Image7_Gephi_example.png)
 
 
