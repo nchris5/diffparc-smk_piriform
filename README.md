@@ -72,3 +72,12 @@ If you are using Compute Canada, you can use the cc-slurm profile, which submits
 
 * Option C)
 Or, with neuroglia-helpers can get a 1-GPU, 8-core, 32gb node and run locally there. First, get a node with a GPU (default 8-core, 32gb, 3 hour limit): ```regularInteractive -g```. Then, run: ```snakemake --use-conda --use-singularity --cores 8 --resources gpu=1 mem=32000```
+
+##### Step 4b: Executing workflow on Compute Canada via the cc-slurm profile in iterations
+If you have a large number of subjects, we recommend you run the workflow in the following stages:
+1. bedpostx_gpu: via ```snakemake --profile cc-slurm --until perform_bedpostx_gpu```
+2. generate target segs and probtrackx2_gpu: via ```snakemake --profile cc-slurm --until run_probtrack```
+3. piriform diffusion parcellation with spectral_clustering in template space on concatenated subjects and creation of Gephi input nodes/edges tables: via ```snakemake --profile cc-slurm --until create_gephi_input_nodes_and_edge_tables```
+4. probtrackx2_gpu run again on each cluster to generate visualizations of each cluster's connectivity: via ```snakemake --profile cc-slurm --until vote_tractmap_template```
+
+Be sure to run ```snakemake --profile cc-slurm --until <iteration name previously run> -np``` after running each iteration to ensure that all outputs were sucessfully created, before moving on to the next iteration.
