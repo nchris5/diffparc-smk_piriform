@@ -2,8 +2,6 @@
 
 1)  **Creating Input Nodes and Edges Files for Gephi**
 
-<!-- -->
-
 1.  First step is to create the nodes table, All nodes tables require at
     minimum 2 columns: “Id” and “Label”.
 
