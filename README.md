@@ -37,10 +37,10 @@ Snakemake workflow overview for diffusion-based parcellation of the piriform cor
    * ```in_dwi_mask_nii```
 
 ### Required Singularity Containers:
-* singularity_neuroglia: FSL, ANTS, NiftyReg, gnu-parallel
-* Freesurfer
-* Connectome workbench
-* FSL6 with CUDA container (for running gpu versions of bedpostx and probtrackx2)
+* ```singularity_neuroglia```: FSL, ANTS, NiftyReg, gnu-parallel
+* ```singularity_freesurfer```: Freesurfer
+* ```singularity_connectome_workbench```: Connectome wb
+* ```singularity_cuda```: FSL6 with CUDA container (for running gpu versions of bedpostx and probtrackx2)
 
 ### Authors:
 * Ali Khan @ akhanf
