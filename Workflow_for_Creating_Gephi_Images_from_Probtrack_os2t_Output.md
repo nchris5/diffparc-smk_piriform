@@ -1,17 +1,18 @@
-**Workflow for creating probtrack os2t output networks in Gephi**
+# Workflow for creating probtrack os2t output networks in Gephi
 
-Step 1)  **Creating Input Nodes and Edges Files for Gephi**
-1.  First step is to create the nodes table, All nodes tables require at
-    minimum 2 columns: “Id” and “Label”.
-    
+## Step 1) Creating Input Nodes and Edges Files for Gephi:
+### 1.  First step is to create the nodes table:
+
+All nodes tables require at minimum 2 columns: “Id” and “Label”.
+
 -   **Id:** Numbered list from 1number of regions, this includes both
-    the targets and the seeds
-
+    the targets and the seeds.
+    
 -   **Label:** Label corresponding to that Id (i.e. row 1: Id=1,
     Label=V1 … etc). If looking specifically at the connectivity of
     seeds—target, place the seeds at the bottom of the list (i.e. 180
     regions in glasser atlas targets, then seed labels begin at
-    Id=181, Label=Seed\#1Name)
+    Id=181, Label=Seed\#1Name).
 
 -   You may add additional columns in the Nodes table that describe some
     property of that Id,label pair. (i.e. common to add “Modularity
@@ -22,7 +23,7 @@ Step 1)  **Creating Input Nodes and Edges Files for Gephi**
     Class = 2 and Modularity Class Label = Early Visual Cortex), along
     with the accompanying “**color”** column that denotes RBG values for
     this modularity class. Any other descriptors may be added to the
-    nodes table
+    nodes table.
 
 -   Save the Nodes table as a **csv**
 
@@ -42,12 +43,9 @@ Step 1)  **Creating Input Nodes and Edges Files for Gephi**
   10   V3A     173,192,0     3
 ```
 
-2.  Creating the edges table, All edges tables require at minimum 2
-    columns: “Source” and “Target”. Note that since there are 3
-    different seeds (Cluster01, Cluster02, Cluster03) that each have 180
-    targets (Glasser atlas targets 1-180), each column length is
-    180\*number of seeds (i.e. 180x3) with the first 180 entries
-    corresponding to Cluster01, etc.
+### 2.  Creating the edges table:
+    
+    All edges tables require at minimum of two columns: “Source” and “Target”. e.g. if there are 3 different seeds (Cluster01, Cluster02, Cluster03) that each have 180 targets (Glasser atlas targets 1-180), each column length is 180\*number of seeds (i.e. 180x3) with the first 180 entries corresponding to Cluster01, etc.
 
 -   **Source:** Id corresponding to the source node (i.e. 181)
 
@@ -94,7 +92,7 @@ Step 1)  **Creating Input Nodes and Edges Files for Gephi**
   181      Cluster01   89       TE1a     950.5206            0.105022                      178                 20
 ```
 
-Step 2)  **Loading the Nodes and Edges into Gephi**
+## Step 2) Loading the Nodes and Edges into Gephi:
 
 1.  Within Gephi, open a new project and navigate to the “Data
     Laboratory” tab.
@@ -124,7 +122,7 @@ Step 2)  **Loading the Nodes and Edges into Gephi**
     workspace” is selected and click ok. You will now see your important
     table in the data laboratory “Edges” tab.
 
-Step 3)  **Viewing and Manipulating the Network in Gephi**
+## Step 3) Viewing and Manipulating the Network in Gephi:
 
 1.  At this point, you can move to the “Overview” tab and visualize the
     network with its default settings. As viewed in the example below:
@@ -178,7 +176,7 @@ b)  The node size may also be changed by selecting the second icon on
     ![](media/image4.png){width="5.3697473753280835in"
     height="2.880501968503937in"}
 
-Step 4) **Filtering the Graph:** 
+## Step 4) Filtering the Graph:
     
     Right now it is somewhat difficult to
     visually see the most important edge weights since each cluster in
@@ -204,7 +202,7 @@ Step 4) **Filtering the Graph:**
     the nodes they connect. Don’t worry, this will be resolved when
     viewing the final graph in the preview tab.
 
-Step 5)  **Saving the final graph**
+## Step 5) Saving the final graph:
 1.  Select the preview tab while the filter is being continuously
     applied
 
@@ -225,7 +223,7 @@ Step 5)  **Saving the final graph**
 
 ![](media/image7.png){width="6.5in" height="3.4972222222222222in"}
 
-Step 6)  **Manually Adding in Modularity Class labels:**
+## Step 6) Manually Adding in Modularity Class labels:
 
 -   Unfortunately, Gephi does not have a good way to manually add in the
     overarching modularity class labels while still maintaining the
