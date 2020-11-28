@@ -1,10 +1,9 @@
 **Workflow for creating probtrack os2t output networks in Gephi**
 
-1)  **Creating Input Nodes and Edges Files for Gephi**
-
-    1.  First step is to create the nodes table, All nodes tables require at
+Step 1)  **Creating Input Nodes and Edges Files for Gephi**
+1.  First step is to create the nodes table, All nodes tables require at
     minimum 2 columns: “Id” and “Label”.
-
+    
 -   **Id:** Numbered list from 1number of regions, this includes both
     the targets and the seeds
 
@@ -28,7 +27,7 @@
 -   Save the Nodes table as a **csv**
 
 -   Example Nodes Table:
-
+```
   Id   Label   color         Modularity Class
   ---- ------- ------------- ------------------
   1    V1      180,182,255   1
@@ -41,8 +40,9 @@
   8    IPS1    173,192,0     3
   9    V7      173,192,0     3
   10   V3A     173,192,0     3
+```
 
-1.  Creating the edges table, All edges tables require at minimum 2
+2.  Creating the edges table, All edges tables require at minimum 2
     columns: “Source” and “Target”. Note that since there are 3
     different seeds (Cluster01, Cluster02, Cluster03) that each have 180
     targets (Glasser atlas targets 1-180), each column length is
@@ -79,7 +79,7 @@
 -   Example Edges table (note that I sorted this table to view the
     highest weight at the top, just for simplicity in viewing this
     example):
-
+```
   Source   SLabel      Target   TLabel   ConnectivityScore   ConnectivityScoreNormalized   Rank\_in\_Cluster   Weight
   -------- ----------- -------- -------- ------------------- ----------------------------- ------------------- --------
   181      Cluster01   70       AVI      4400.303            0.486185                      180                 89
@@ -92,10 +92,9 @@
   183      Cluster03   80       H        249.5958            0.135935                      177                 25
   182      Cluster02   89       TE1a     1012.787            0.129527                      178                 24
   181      Cluster01   89       TE1a     950.5206            0.105022                      178                 20
+```
 
-1)  **Loading the Nodes and Edges into Gephi**
-
-<!-- -->
+Step 2)  **Loading the Nodes and Edges into Gephi**
 
 1.  Within Gephi, open a new project and navigate to the “Data
     Laboratory” tab.
@@ -125,11 +124,7 @@
     workspace” is selected and click ok. You will now see your important
     table in the data laboratory “Edges” tab.
 
-<!-- -->
-
-1)  **Viewing and Manipulating the Network in Gephi**
-
-<!-- -->
+Step 3)  **Viewing and Manipulating the Network in Gephi**
 
 1.  At this point, you can move to the “Overview” tab and visualize the
     network with its default settings. As viewed in the example below:
@@ -159,8 +154,6 @@
 5.  Now that the primary graph chord has been created, it needs to be
     made more readable.
 
-<!-- -->
-
 a)  The first thing we want to do is color the nodes based on the RGB
     values provided in the NodesTable.csv class. **To do this, you must
     have the Give Colors To Nodes plugin installed (click
@@ -185,9 +178,9 @@ b)  The node size may also be changed by selecting the second icon on
     ![](media/image4.png){width="5.3697473753280835in"
     height="2.880501968503937in"}
 
-<!-- -->
-
-1.  **Filtering the Graph:** Right now it is somewhat difficult to
+Step 4) **Filtering the Graph:** 
+    
+    Right now it is somewhat difficult to
     visually see the most important edge weights since each cluster in
     the center of the circle has 180 edges shown. If for example we only
     want to view the top 5 ranked edges for each cluster, we can filter
@@ -211,10 +204,7 @@ b)  The node size may also be changed by selecting the second icon on
     the nodes they connect. Don’t worry, this will be resolved when
     viewing the final graph in the preview tab.
 
-1)  **Saving the final graph**
-
-<!-- -->
-
+Step 5)  **Saving the final graph**
 1.  Select the preview tab while the filter is being continuously
     applied
 
@@ -235,7 +225,7 @@ b)  The node size may also be changed by selecting the second icon on
 
 ![](media/image7.png){width="6.5in" height="3.4972222222222222in"}
 
-1)  **Manually Adding in Modularity Class labels:**
+Step 6)  **Manually Adding in Modularity Class labels:**
 
 -   Unfortunately, Gephi does not have a good way to manually add in the
     overarching modularity class labels while still maintaining the
