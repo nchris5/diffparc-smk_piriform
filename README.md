@@ -1,11 +1,10 @@
 # **Snakemake workflow: diffparc-smk_piriform**
 
 Snakemake workflow for diffusion-based parcellation of the piriform cortex on graham.computecanada
-
-Performs: 
-1. ```bedpostx_gpu``` on HCP 7T diffusion data
-2. Generates target segmentation 3D nifti volumes from HCP32k surf giftis
-3. ```probtrackx2_gpu``` from the piriform seed in each subject's space to targets
+Overview of diffparc-smk_piriform workflow steps: 
+1. ```bedpostx_gpu```: Generates white matter fibre orientations within each brain voxel for each subject's HCP 7T diffusion data. 
+2. ```rule hcp_mmk```: Generates target segmentation 3D nifti volumes (bilateral) from HCP32k surf gifti files (180 regions)
+3. ```probtrackx2_gpu```: Performs from the piriform seed in each subject's space to targets
 4. Brings connectivity data for each subject's seed voxels into template and performs spectral clustering on the concatenated feature vectors to parcellate into k regions
 5. Creates node and edges tables to use as the input to the Gephi software for each of the clustering solutions
 
