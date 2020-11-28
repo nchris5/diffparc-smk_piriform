@@ -67,6 +67,8 @@ For installation details, see the instructions in the Snakemake documentation.
 Execute the workflow locally via: ```snakemake --use-conda --use-singularity --cores $N```
 using $N cores, or, run it in a cluster environment via ```snakemake --use-conda --use-singularity --cluster qsub --jobs 100``` or ```snakemake --use-conda --use-singularity --drmaa --jobs 100```
 
+* Option B)
 If you are using Compute Canada, you can use the cc-slurm profile, which submits jobs and takes care of requesting the correct resources per job (including GPUs). Once it is set-up with cookiecutter, run: ```snakemake --profile cc-slurm```
 
+* Option C)
 Or, with neuroglia-helpers can get a 1-GPU, 8-core, 32gb node and run locally there. First, get a node with a GPU (default 8-core, 32gb, 3 hour limit): ```regularInteractive -g```. Then, run: ```snakemake --use-conda --use-singularity --cores 8 --resources gpu=1 mem=32000```
