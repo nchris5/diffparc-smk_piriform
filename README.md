@@ -44,7 +44,7 @@ Performs:
 * Ali Khan @ akhanf
 * Nick Christidis @ nchris5
 
-### Usage:
+## Usage:
 If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) repository and, if available, its DOI (see above).
 
 #### Step 1: Obtain a copy of this workflow
