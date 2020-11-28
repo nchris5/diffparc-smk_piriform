@@ -23,18 +23,18 @@ Snakemake workflow overview for diffusion-based parcellation of the piriform cor
    * ```ants_warp_nii```: Warp from subject-->template
    * ```ants_ref_nii```: Study-specific T1w created from: [ants_build_template_smk]
 
-6. targets_text: List of ROIs in atlas segmentations to use as targets for piriform connectivity (default hcp_mmp_sym_180)
-7. max_k: Maximum number of clusters to create during spectral clustering (will create all cluster solutions <= max_k)
-8. probtrack: Tractography parameters, seed_resolution defines the resolution to resample all other inputs to
-9. probtrack_tractmap: Tractography parameters to generate individual tractmaps for each cluster following spectral clustering (useful for visualization)
-10. in_freesurfer: Path to subject freesurfer dir from HCP_1200 release
-11. dwi_preproc_dir: Path to base directory containing the HCP 7T diffusion data for all subjects
+6. ```targets_txt```: List of ROIs in atlas segmentations to use as targets for piriform connectivity (default hcp_mmp_sym_180)
+7. ```max_k```: Maximum number of clusters to create during spectral clustering (will create all cluster solutions <= max_k)
+8. ```probtrack```: Tractography parameters, seed_resolution defines the resolution to resample all other inputs to
+9. ```probtrack_tractmap```: Tractography parameters to generate individual tractmaps for each cluster following spectral clustering (useful for visualization)
+10. ```in_freesurfer```: Path to subject freesurfer dir from HCP_1200 release
+11. ```dwi_preproc_dir```: Path to base directory containing the HCP 7T diffusion data for all subjects
 
-   * in_dwi_nii
-   * in_dwi_bval
-   * in_dwi_bvec
-   * in_dwi_grad_dev
-   * in_dwi_mask_nii
+   * ```in_dwi_nii```
+   * ```in_dwi_bval```
+   * ```in_dwi_bvec```
+   * ```in_dwi_grad_dev```
+   * ```in_dwi_mask_nii```
 
 ### Required Singularity Containers:
 * singularity_neuroglia: FSL, ANTS, NiftyReg, gnu-parallel
