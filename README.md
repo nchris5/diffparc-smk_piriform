@@ -65,58 +65,8 @@ For installation details, see the instructions in the Snakemake documentation.
 #### Step 4: Execute workflow
 * OptionA)
 Execute the workflow locally via: ```snakemake --use-conda --use-singularity --cores $N```
-using $N cores or run it in a cluster environment via
-```
-snakemake --use-conda --use-singularity --cluster qsub --jobs 100
-```
-or
-```
-snakemake --use-conda --use-singularity --drmaa --jobs 100
-```
-If you are using Compute Canada, you can use the cc-slurm profile, which submits jobs and takes care of requesting the correct resources per job (including GPUs). Once it is set-up with cookiecutter, run:
-```
-snakemake --profile cc-slurm
-```
-Or, with neuroglia-helpers can get a 1-GPU, 8-core, 32gb node and run locally there. First, get a node with a GPU (default 8-core, 32gb, 3 hour limit):
-```
-regularInteractive -g
-```
-Then, run:
-```
-snakemake --use-conda --use-singularity --cores 8 --resources gpu=1 mem=32000
-```
-See the Snakemake documentation for further details.
+using $N cores, or, run it in a cluster environment via ```snakemake --use-conda --use-singularity --cluster qsub --jobs 100``` or ```snakemake --use-conda --use-singularity --drmaa --jobs 100```
 
-#### Step 5: Investigate results
-After successful execution, you can create a self-contained interactive HTML report with all results via:
+If you are using Compute Canada, you can use the cc-slurm profile, which submits jobs and takes care of requesting the correct resources per job (including GPUs). Once it is set-up with cookiecutter, run: ```snakemake --profile cc-slurm```
 
-```
-snakemake --report report.html
-```
-This report can, e.g., be forwarded to your collaborators. An example (using some trivial test data) can be seen here.
-
-#### Step 6: Commit changes
-Whenever you change something, don't forget to commit the changes back to your github copy of the repository:
-```
-git commit -a
-git push
-```
-
-#### Step 7: Obtain updates from upstream 
-Whenever you want to synchronize your workflow copy with new developments from upstream, do the following.
-
-1. Once, register the upstream repository in your local copy: ```git remote add -f upstream git@github.com:snakemake-workflows/ants_build_template_smk.git or git remote add -f upstream https://github.com/snakemake-workflows/ants_build_template_smk.git``` if you do not have setup ssh keys.
-2. Update the upstream version: ```git fetch upstream```.
-3. Create a diff with the current version: ```git diff HEAD upstream/master workflow > upstream-changes.diff```.
-4. Investigate the changes: ```vim upstream-changes.diff```.
-5. Apply the modified diff via: ```git apply upstream-changes.diff```.
-6. Carefully check whether you need to update the config files: ```git diff HEAD upstream/master config```. If so, do it manually, and only where necessary, since you would otherwise likely overwrite your settings and samples.
-
-#### Step 8: Contribute back
-In case you have also changed or added steps, please consider contributing them back to the original repository:
-
-Fork the original repo to a personal or lab account.
-Clone the fork to your local system, to a different place than where you ran your analysis.
-Copy the modified files from your analysis to the clone of your fork, e.g., ```cp -r workflow path/to/fork```. Make sure to not accidentally copy config file contents or sample sheets. Instead, manually update the example config files if necessary.
-Commit and push your changes to your fork.
-Create a pull request against the original repository.
+Or, with neuroglia-helpers can get a 1-GPU, 8-core, 32gb node and run locally there. First, get a node with a GPU (default 8-core, 32gb, 3 hour limit): ```regularInteractive -g```. Then, run: ```snakemake --use-conda --use-singularity --cores 8 --resources gpu=1 mem=32000```
