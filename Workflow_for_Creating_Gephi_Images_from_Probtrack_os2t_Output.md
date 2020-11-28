@@ -45,7 +45,7 @@ All nodes tables require at minimum 2 columns: “Id” and “Label”.
 
 ### 2.  Creating the edges table:
     
-    All edges tables require at minimum of two columns: “Source” and “Target”. e.g. if there are 3 different seeds (Cluster01, Cluster02, Cluster03) that each have 180 targets (Glasser atlas targets 1-180), each column length is 180\*number of seeds (i.e. 180x3) with the first 180 entries corresponding to Cluster01, etc.
+All edges tables require at minimum of two columns: “Source” and “Target”. e.g. if there are 3 different seeds (Cluster01, Cluster02, Cluster03) that each have 180 targets (Glasser atlas targets 1-180), each column length is 180\*number of seeds (i.e. 180x3) with the first 180 entries corresponding to Cluster01, etc.
 
 -   **Source:** Id corresponding to the source node (i.e. 181)
 
