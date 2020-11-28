@@ -63,7 +63,7 @@ Activate the conda environment: ```conda activate snakemake``` or add this line 
 For installation details, see the instructions in the Snakemake documentation.
 
 #### Step 4: Execute workflow
-* OptionA)
+* Option A)
 Execute the workflow locally via: ```snakemake --use-conda --use-singularity --cores $N```
 using $N cores, or, run it in a cluster environment via ```snakemake --use-conda --use-singularity --cluster qsub --jobs 100``` or ```snakemake --use-conda --use-singularity --drmaa --jobs 100```
 
