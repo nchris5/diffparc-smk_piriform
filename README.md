@@ -3,23 +3,23 @@
 Snakemake workflow for diffusion-based parcellation of the piriform cortex on graham.computecanada
 
 Performs: 
-1. bedpostx_gpu on HCP 7T diffusion data
+1. ```bedpostx_gpu``` on HCP 7T diffusion data
 2. Generates target segmentation 3D nifti volumes from HCP32k surf giftis
-3. probtrackx2_gpu from the piriform seed in each subject's space to targets
+3. ```probtrackx2_gpu``` from the piriform seed in each subject's space to targets
 4. Brings connectivity data for each subject's seed voxels into template and performs spectral clustering on the concatenated feature vectors to parcellate into k regions
 5. Creates node and edges tables to use as the input to the Gephi software for each of the clustering solutions
 
 ## Inputs in config/config.yml:
-1. participants.tsv: Target subject IDs that have both HCP 7T diffusion and be used in creation of a subject specific template from: [ants_build_template_smk](https://github.com/akhanf/ants_build_template_smk) 
-2. template_prob_seg: Probabilistic segmentation as a 3D nifti for individual piriform hemisphere to process
-3. prob_seg_threshold: Value to threshold the probabilistic segmentation at (default is 0.5, e.g. 0.2 would include 80% of the probseg)
-4. template: Name of template to use for filenaming within the pipeline
+1. ```participants.tsv```: Target subject IDs that have both HCP 7T diffusion and be used in creation of a subject specific template from: [ants_build_template_smk](https://github.com/akhanf/ants_build_template_smk) , (see input 5)
+2. ```template_prob_seg```: Probabilistic segmentation as a 3D nifti for individual piriform hemisphere to process
+3. ```prob_seg_threshold```: Value to threshold the probabilistic segmentation at (default is 0.5, e.g. 0.2 would include 80% of the probseg)
+4. ```template```: Name of template to use for filenaming within the pipeline
 5. ANTS transformations from template T1w space to/from each subject's T1w, i.e. from: [ants_build_template_smk](https://github.com/akhanf/ants_build_template_smk)
  
-   * ants_affine_mat
-   * ants_invwarp_nii
-   * ants_warp_nii
-   * ants_ref_nii
+   * ```ants_affine_mat```: Forward affine from subject-->template
+   * ```ants_invwarp_nii```: Warp from template-->subject
+   * ```ants_warp_nii```: Warp from subject-->template
+   * ```ants_ref_nii```: Study-specific T1w created from: [ants_build_template_smk]
 
 6. targets_text: List of ROIs in atlas segmentations to use as targets for piriform connectivity (default hcp_mmp_sym_180)
 7. max_k: Maximum number of clusters to create during spectral clustering (will create all cluster solutions <= max_k)
