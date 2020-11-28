@@ -82,4 +82,4 @@ If you have a large number of subjects, we recommend you run the workflow in the
 3. piriform diffusion parcellation with spectral_clustering in template space on concatenated subjects and creation of Gephi input nodes/edges tables: via ```snakemake --profile cc-slurm --until create_gephi_input_nodes_and_edge_tables```
 4. probtrackx2_gpu run again on each cluster to generate visualizations of each cluster's connectivity: via ```snakemake --profile cc-slurm --until vote_tractmap_template```
 
-Be sure to run ```snakemake --profile cc-slurm --until <iteration name previously run> -np``` after running each iteration to ensure that all outputs were sucessfully created, before moving on to the next iteration.
+After running each iteration, run ```snakemake --profile cc-slurm --until <iteration name previously run> -np``` to ensure that all jobs completed and all outputs were sucessfully created before moving on to the next iteration.
