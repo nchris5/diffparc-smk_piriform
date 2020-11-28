@@ -57,8 +57,10 @@ Configure the workflow according to your needs via editing the files in the conf
 #### Step 3: Install and Activate Snakemake
 Install Snakemake using conda: ```conda create -c bioconda -c conda-forge -n snakemake snakemake```
 
-For installation details, see the instructions in the Snakemake documentation.
+
 Activate the conda environment: ```conda activate snakemake``` or add this line into your bash startup
+
+For installation details, see the instructions in the Snakemake documentation.
 
 #### Step 4: Execute workflow
 * OptionA)
