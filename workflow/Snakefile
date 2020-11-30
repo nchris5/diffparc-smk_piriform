@@ -37,21 +37,25 @@ include: 'rules/hcp7T_Diffusion_bedpostx_gpu.smk'
 
 include: 'rules/hcp_mmp.smk'
 
+include: 'rules/diffparc.smk'
+
+include: 'rules/tractmap.smk'
+
+
+
 #If want to run everything including tractmap, uncomment everything and this rule all
 rule all:
     input: 
         outdseg = expand('results/tractmap/transform_tractmaps_to_template/templateSpace-{template}_{seed}_k-{k}_tractmaps_Averaged_dseg_FINAL.nii.gz',template=config['template'],seed=seeds,k=range(2,config['max_k']+1))
+        Gephi_Nodes_and_Edges_Tables_dir = 'results/gephi_input_NodesandEdges_tables'
+
 
 #If want to run only bedpostx_gpu, uncomment this and only uncomment rules/hcp7T_Diffusion_bedpostx_gpu.smk
 #rule all:
 #    input: expand('results/Diffusion_7T/{subject}.bedpostX/mean_S0samples.nii.gz',subject=subjects)
 
+
 #If want to run only hcp_mmp and diffparc after running bedpost, uncomment this and only uncomment rules/hcp_mmp.smk and rules/diffparc.smk, and use snakemake --profile cc-slurm --until gen_targets_txt
 #rule all:
 #    input:
-#        cluster_k = expand('results/clustering/group_space-{template}_seed-{seed}_method-spectralcosine_k-{k}_cluslabels.nii.gz',template=config['template'],seed=seeds,k=range(2,config['max_k']+1)),
-#        connmap_Clusters_group_npz_dir = expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',seed=seeds,template=config['template'],k=range(2,config['max_k']+1))
-
-include: 'rules/diffparc.smk'
-
-include: 'rules/tractmap.smk'
+#        Gephi_Nodes_and_Edges_Tables_dir = 'results/gephi_input_NodesandEdges_tables'

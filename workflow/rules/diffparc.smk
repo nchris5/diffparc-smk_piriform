@@ -26,12 +26,12 @@ rule binarize_template_seed:
     input: rules.get_template_seed.output
     params:
         threshold = config['prob_seg_threshold']
-    output: 'results/template_masks/sub-{template}_desc-{seed}_mask.nii.gz'
+    output: 'results/template_masks/sub-{template}_desc-{seed}_thr02_binarized.nii.gz'
     container: config['singularity_neuroglia']
     log: 'logs/binarize_template_seed/{template}_{seed}.log'
     group: 'group0'
     shell:
-        'fslmaths {input} -thr {params.threshold} {output} &> {log}'
+        'fslmaths {input} -thr {params.threshold} -bin {output} &> {log}'
 
 
 #transform probabilistic seed to subject
@@ -48,54 +48,97 @@ rule transform_to_subject:
     group: 'hcp_mmp_subj'
     threads: 8
     shell:
-        'antsApplyTransforms -d 3 --interpolation Linear -i {input.seed} -o {output} -r {input.ref} -t [{input.affine},1] -t {input.invwarp} &> {log}'
+        #Spline interp here now, since probabilistic seg
+        'antsApplyTransforms -d 3 --interpolation BSpline -i {input.seed} -o {output} -r {input.ref} -t [{input.affine},1] -t {input.invwarp} &> {log}'
 
 
+###Use this version if you would like to perform probtrack at a resolution different than the HCP_7T_Diffusion data as provided by probtrack seed_resolution in the config file
+#rule binarize_dwi_brainmask:
+#    input:
+#        dwi = 'results/Diffusion_7T/{subject}.bedpostX/mean_S0samples.nii.gz'
+#    params:
+#        seed_resolution = config['probtrack']['seed_resolution']
+#    output:
+#        mask = 'results/diffparc/sub-{subject}/masks/brain_mask_dwi.nii.gz',
+#        mask_res = 'results/diffparc/sub-{subject}/masks/brain_mask_resampled_dwi_resolution.nii.gz'
+#    container: config['singularity_neuroglia']
+#    log: 'logs/resample_brainmask/sub-{subject}.log'
+#    group: 'hcp_mmp_subj'
+#    shell:
+#        'fslmaths {input.dwi} -bin {output.mask} && '
+#        'mri_convert {output.mask} -vs {params.seed_resolution} {params.seed_resolution} {params.seed_resolution} {output.mask_res} -rt nearest &> {log}'
 
-rule resample_brainmask:
+#rule resample_targets:
+#    input:
+#        mask = rules.binarize_dwi_brainmask.output.mask_res,
+#        targets = rules.combine_lr_hcp.output.lh_rh
+#    output:
+#        targets_res = 'results/diffparc/sub-{subject}/masks/lh_rh_targets_resampled_dwi_resolution.nii.gz'
+#    envmodules: 'ants'
+#    container: config['singularity_neuroglia']
+#    log: 'logs/resample_targets/sub-{subject}.log'
+#    group: 'hcp_mmp_subj'
+#    shell:
+#        #Nearest interp since targets are labels
+#        'antsApplyTransforms -d 3 --interpolation NearestNeighbor -i {input.targets} -o {output.targets_res} -r {input.mask} &> {log}'
+
+#rule resample_seed:
+#    input:
+#        seed = rules.transform_to_subject.output,
+#        mask = rules.binarize_dwi_brainmask.output.mask_res
+#    output:
+#        seed_res = 'results/diffparc/sub-{subject}/masks/seed_from-{template}_{seed}_resampled_dwi_resolution.nii.gz',
+#    envmodules: 'ants'
+#    container: config['singularity_neuroglia']
+#    log: 'logs/resample_seed/{template}_sub-{subject}_{seed}.log'
+#    group: 'hcp_mmp_subj'
+#    shell:
+#        #Spline interp here now, since probabilistic seg
+#        'antsApplyTransforms -d 3 --interpolation BSpline -i {input.seed} -o {output.seed_res} -r {input.mask} &> {log}'
+###End of commented version if wanting probtrack at resolution different than HCP_7T_Diffusion data
+
+
+###DEFAULT Use this version if want to perform probtrack at the HCP_7T_Diffusion resolution
+rule binarize_dwi_brainmask:
     input:
         dwi = 'results/Diffusion_7T/{subject}.bedpostX/mean_S0samples.nii.gz'
-    params:
-        seed_resolution = config['probtrack']['seed_resolution']
     output:
         mask = 'results/diffparc/sub-{subject}/masks/brain_mask_dwi.nii.gz',
-        mask_res = 'results/diffparc/sub-{subject}/masks/brain_mask_dwi_resampled.nii.gz'
     container: config['singularity_neuroglia']
-    log: 'logs/resample_brainmask/sub-{subject}.log'
+    log: 'logs/binarize_dwi_brainmask/sub-{subject}.log'
     group: 'hcp_mmp_subj'
     shell:
-        'fslmaths {input.dwi} -bin {output.mask} && '
-        'mri_convert {output.mask} -vs {params.seed_resolution} {params.seed_resolution} {params.seed_resolution} {output.mask_res} -rt nearest &> {log}'
-
-
+        'fslmaths {input.dwi} -bin {output.mask} &> {log}'
 
 rule resample_targets:
-    input: 
-        mask_res = rules.resample_brainmask.output.mask_res,
+    input:
+        mask = rules.binarize_dwi_brainmask.output.mask,
         targets = rules.combine_lr_hcp.output.lh_rh
     output:
-        targets_res = 'results/diffparc/sub-{subject}/masks/lh_rh_targets_dwi.nii.gz'
+        targets_res = 'results/diffparc/sub-{subject}/masks/lh_rh_targets_resampled_dwi_resolution.nii.gz'
+    envmodules: 'ants'
     container: config['singularity_neuroglia']
     log: 'logs/resample_targets/sub-{subject}.log'
     group: 'hcp_mmp_subj'
     shell:
-        'reg_resample -flo {input.targets} -res {output.targets_res} -ref {input.mask_res} -NN 0  &> {log}'
-
+        #Nearest interp since targets are labels
+        'antsApplyTransforms -d 3 --interpolation NearestNeighbor -i {input.targets} -o {output.targets_res} -r {input.mask} &> {log}'
 
 
 rule resample_seed:
     input: 
         seed = rules.transform_to_subject.output,
-        mask_res = rules.resample_brainmask.output.mask_res
+        mask = rules.binarize_dwi_brainmask.output.mask
     output:
-        seed_res = 'results/diffparc/sub-{subject}/masks/seed_from-{template}_{seed}_dwi_resampled.nii.gz',
+        seed_res = 'results/diffparc/sub-{subject}/masks/seed_from-{template}_{seed}_resampled_dwi_resolution.nii.gz',
+    envmodules: 'ants'
     container: config['singularity_neuroglia']
     log: 'logs/resample_seed/{template}_sub-{subject}_{seed}.log'
     group: 'hcp_mmp_subj'
     shell:
-        #linear interp here now, since probabilistic seg
-        'reg_resample -flo {input.seed} -res {output.seed_res} -ref {input.mask_res}  &> {log}'
-
+        #Spline interp here now, since probabilistic seg
+        'antsApplyTransforms -d 3 --interpolation BSpline -i {input.seed} -o {output.seed_res} -r {input.mask} &> {log}'
+###End of DEFAULT version if want to perofrm probtrack at the HCP_7T_Diffusion resolution
 
 
 rule binarize_subject_seed:
@@ -103,18 +146,18 @@ rule binarize_subject_seed:
         seed_res = rules.resample_seed.output.seed_res
     params:
         threshold = config['prob_seg_threshold']
-    output: 'results/diffparc/sub-{subject}/masks/seed_from-{template}_{seed}_binary.nii.gz'
+    output: 'results/diffparc/sub-{subject}/masks/seed_from-{template}_{seed}_resampled_dwi_resolution_thr02_binarized.nii.gz'
     container: config['singularity_neuroglia']
     log: 'logs/binarize_subject_seed/{template}_sub-{subject}_{seed}.log'
     group: 'hcp_mmp_subj'
     shell:
-        'fslmaths {input} -thr {params.threshold} {output} &> {log}'
+        'fslmaths {input} -thr {params.threshold} -bin {output} &> {log}'
          
 
 
 rule split_targets:
     input: 
-        targets = 'results/diffparc/sub-{subject}/masks/lh_rh_targets_dwi.nii.gz',
+        targets_res = 'results/diffparc/sub-{subject}/masks/lh_rh_targets_resampled_dwi_resolution.nii.gz',
     params:
         target_nums = lambda wildcards: [str(i) for i in range(len(targets))],
         target_seg = expand('results/diffparc/sub-{subject}/targets/{target}.nii.gz',target=targets,allow_missing=True)
@@ -125,7 +168,7 @@ rule split_targets:
     threads: 32 
     group: 'hcp_mmp_subj'
     shell:
-        'mkdir -p {output} && parallel  --jobs {threads} fslmaths {input.targets} -thr {{1}} -uthr {{1}} -bin {{2}} &> {log} ::: {params.target_nums} :::+ {params.target_seg}'
+        'mkdir -p {output} && parallel  --jobs {threads} fslmaths {input.targets_res} -thr {{1}} -uthr {{1}} -bin {{2}} &> {log} ::: {params.target_nums} :::+ {params.target_seg}'
 
 rule gen_targets_txt:
     input:
@@ -148,7 +191,7 @@ rule run_probtrack:
     input:
         seed_res = rules.binarize_subject_seed.output,
         target_txt = rules.gen_targets_txt.output.target_txt,
-        mask = rules.resample_brainmask.output.mask,
+        mask = rules.binarize_dwi_brainmask.output.mask,
         target_seg_dir = rules.split_targets.output.target_seg_dir
     params:
         bedpost_merged = 'results/Diffusion_7T/{subject}.bedpostX/merged',
@@ -194,7 +237,7 @@ rule transform_conn_to_template:
 
 rule save_connmap_template_npz:
     input:
-        mask = 'results/template_masks/sub-{template}_desc-{seed}_mask.nii.gz',
+        mask = 'results/template_masks/sub-{template}_desc-{seed}_thr02_binarized.nii.gz', #HCP_Template_Piriform_Mask
         probtrack_dir = 'results/diffparc/sub-{subject}/probtrack_{template}_{seed}_warped'
     params:
         connmap_3d = expand('results/diffparc/sub-{subject}/probtrack_{template}_{seed}_warped/seeds_to_{target}_space-{template}.nii.gz',target=targets,allow_missing=True),
@@ -216,8 +259,6 @@ rule gather_connmap_group:
     conda: '../envs/sklearn.yml'
     group: 'group_post_track'
     script: '../scripts/gather_connmap_group.py'
-
-
      
 rule spectral_clustering:
     input:
@@ -231,6 +272,8 @@ rule spectral_clustering:
     group: 'group_post_track'
     script: '../scripts/spectral_clustering.py'
 
+
+
 rule save_connmapClusters_template_npz:
     input:
         probtrack_dir = 'results/diffparc/sub-{subject}/probtrack_{template}_{seed}_warped',
@@ -243,7 +286,7 @@ rule save_connmapClusters_template_npz:
         connmap_Clusters_npz_depend = directory(expand('results/connmapClusters/sub-{subject}/connmap_{seed}_{template}/sub-{subject}_space-{template}_seed-{seed}_k-{k}',k=range(2,config['max_k']+1),allow_missing=True))
     log: 'logs/save_connmapClusters_template_npz/sub-{subject}_{seed}_{template}.log'
     conda: '../envs/sklearn.yml'
-    group: 'k_post_track2'
+    group: 'post_track'
     script: '../scripts/save_connmapClusters_template_npz.py'
 
 rule gather_connmapClusters_group:
@@ -256,6 +299,24 @@ rule gather_connmapClusters_group:
         connmap_Clusters_group_npz_dir = directory(expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',k=range(2,config['max_k']+1),allow_missing=True))
     log: 'logs/gather_connmapClusters_group/{seed}_{template}.log'
     conda: '../envs/sklearn.yml'
-    group: 'group2_post_track'
+    group: 'groupC_post_track'
     script: '../scripts/gather_connmapClusters_group.py'
+
+
+
+rule create_gephi_input_nodes_and_edge_tables:
+    input:
+        connmap_Clusters_group_dir = expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',seed=seeds,template=config['template'],k=range(2,config['max_k']+1))
+    params:
+        seeds_py = list(config['template_prob_seg'].keys()),
+        max_k = config['max_k'],
+        connmapClusters_dir = 'results/connmapClusters',
+        GlasserTable_22regions_colours = 'resources/Glasser_2016_Table_BoldSections_Manually_Identified_convcsv.csv'
+    log: 'logs/create_gephi_input_nodes_and_edge_tables/Gephi_Input_NodesandEdges.log'
+    conda: '../envs/sklearn.yml'
+    group: 'groupGephipost_track'
+    output:
+        Gephi_Nodes_and_Edges_Tables_dir = directory('results/gephi_input_NodesandEdges_tables')
+    script: '../scripts/create_connmapClusters_group_GephiNodes_and_Edges_Tables.py'
+
 
