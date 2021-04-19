@@ -1,3 +1,4 @@
+#
 import pandas as pd
 from os.path import join
 
@@ -33,21 +34,21 @@ wildcard_constraints:
 
 localrules: all, all_hcpmmk
 
-include: 'rules/hcp7T_Diffusion_bedpostx_gpu.smk'
+#include: 'rules/hcp7T_Diffusion_bedpostx_gpu.smk'
 
 include: 'rules/hcp_mmp.smk'
 
 include: 'rules/diffparc.smk'
 
-include: 'rules/tractmap.smk'
+#include: 'rules/tractmap.smk'
 
 
 
 #If want to run everything including tractmap, uncomment everything and this rule all
-rule all:
-    input: 
-        outdseg = expand('results/tractmap/transform_tractmaps_to_template/templateSpace-{template}_{seed}_k-{k}_tractmaps_Averaged_dseg_FINAL.nii.gz',template=config['template'],seed=seeds,k=range(2,config['max_k']+1))
-        Gephi_Nodes_and_Edges_Tables_dir = 'results/gephi_input_NodesandEdges_tables'
+#rule all:
+#    input: 
+#        outdseg = expand('results/tractmap/transform_tractmaps_to_template/templateSpace-{template}_{seed}_k-{k}_tractmaps_Averaged_dseg_FINAL.nii.gz',template=config['template'],seed=seeds,k=range(2,config['max_k']+1))
+#        Gephi_Nodes_and_Edges_Tables_dir = 'results/gephi_input_NodesandEdges_tables'
 
 
 #If want to run only bedpostx_gpu, uncomment this and only uncomment rules/hcp7T_Diffusion_bedpostx_gpu.smk
@@ -56,6 +57,7 @@ rule all:
 
 
 #If want to run only hcp_mmp and diffparc after running bedpost, uncomment this and only uncomment rules/hcp_mmp.smk and rules/diffparc.smk, and use snakemake --profile cc-slurm --until gen_targets_txt
-#rule all:
-#    input:
-#        Gephi_Nodes_and_Edges_Tables_dir = 'results/gephi_input_NodesandEdges_tables'
+rule all:
+    input:
+        clusters_k = expand('results/clustering/group_space-{template}_seed-{seed}_method-spectralcosine_k-{k}_cluslabels.nii.gz', template=config['template'],seed=seeds,k=range(2,config['max_k']+1)),
+	Gephi_Nodes_and_Edges_Tables_dir = expand('results/gephi_input_NodesandEdges_tables_{seed}',seed=seeds)
