@@ -14,7 +14,7 @@ for a,thiskclustervol in enumerate(snakemake.input.clusters_template_space):
 print('kclusters_nii_list = ',kclusters_nii_list)
 
 cluster_range = range(2,snakemake.params.max_k+1) #Range of the clusters [2, 3, 4]
-ntargets = len(snakemake.params.connmap_3d) #Number of targets = 180
+ntargets = len(snakemake.params.connmap_3d) #Number of targets = 179
 
 for i,this_k in enumerate(cluster_range): #For 0,2 1,3 2,4
     label = 1 #Lowest label value is 1

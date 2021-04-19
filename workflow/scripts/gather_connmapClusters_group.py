@@ -49,7 +49,7 @@ for i,this_k in enumerate(cluster_range): #For 0,2 1,3 2,4
         sum_avg_conn_for_each_target_avggroup = np.sum(avg_conn_for_each_target_avggroup)
         quotients = [number / sum_avg_conn_for_each_target_avggroup for number in avg_conn_for_each_target_avggroup]
         #Create dataframe that includes columns target names and the values of the targets
-        df = pd.DataFrame({'targetnames': targetnamesList, 'ConnectivityScore': avg_conn_for_each_target_avggroup, 'ConnectivityScoreNormalized': quotients}, index=range(1,181))
+        df = pd.DataFrame({'targetnames': targetnamesList, 'ConnectivityScore': avg_conn_for_each_target_avggroup, 'ConnectivityScoreNormalized': quotients}, index=range(0,179))
         dfsorted = df.sort_values(by='ConnectivityScoreNormalized', ascending=False) #Sort the target regions descending
         print("Targets sorted based on avg conn for k-%s and label %s = %s" % (this_k, label, dfsorted))
         #Plot the 10 targets with the highest connectivity to the piriform
