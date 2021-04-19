@@ -1,3 +1,4 @@
+#
 rule all_hcpmmk:
     input: expand('results/hcp_mmp/sub-{subject}/{hemi}.native.hcp-mmp.nii.gz',subject=subjects,hemi=hemis)
 
@@ -119,6 +120,18 @@ rule map_labels_to_volume_ribbon:
         ' -ribbon-constrained {input.white_surf} {input.pial_surf}'
         ' -greedy &> {log}'
      
+rule remove_piriform_label_110:
+    input:
+        label_vol = 'results/hcp_mmp/sub-{subject}/{hemi}.native.hcp-mmp.nii.gz'
+    output:
+        label_vol_removepir110 = 'results/hcp_mmp/sub-{subject}/{hemi}_removepir.native.hcp-mmp.nii.gz',
+    container: config['singularity_neuroglia']
+    threads: 8
+    log: 'logs/remove_piriform_label_110/sub-{subject}_{hemi}.log'
+    group: 'hcp_mmp_subj'
+    shell:
+        'c3d {input.label_vol} -replace 110 0 -o {output.label_vol_removepir110} &> {log}'
+
 
 #currently optional
 rule map_labels_to_volume_wmboundary:
