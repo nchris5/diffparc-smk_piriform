@@ -1,14 +1,14 @@
 
-participants_tsv: 'config/participants.tsv'
+participants_tsv: 'config/participants_testing.tsv'
 
 
 #singularity containers:
-singularity_neuroglia: /project/6007967/akhanf/singularity/bids-apps/khanlab_neuroglia-core_latest.sif 
+singularity_neuroglia: /project/6050199/akhanf/singularity/bids-apps/khanlab_neuroglia-core_latest.sif 
 singularity_cuda: /project/6050199/akhanf/singularity/bids-apps/fsl_6.0.4_cuda9.1.sif
 
 template_prob_seg: 
-  rpiriform: '/scratch/nchris5/HCP_template_piriform_segmentations/snakeBigBrainSeg_to_HCPSubjectSpaceSeg/results/Right_piriform_segmentation_BigBrain_to_HCPtemplate_POSTlabeltolabelReg/BigBrainSeg_Label-5_in_HCPtemplateSegSpace07mm_SmoothedFWHM_Downsampled.nii.gz'
-#  lpiriform: '/scratch/nchris5/HCP_template_piriform_segmentations/snakeBigBrainSeg_to_HCPSubjectSpaceSeg/results/Left_piriform_segmentation_BigBrain_to_HCPtemplate_POSTlabeltolabelReg/BigBrainSeg_Label-5_in_HCPtemplateSegSpace07mm_SmoothedFWHM_Downsampled.nii.gz'
+  rpiriform: '/scratch/nchris5/snakeBigBrainSeg_to_HCPSubjectSpaceSeg_CURRENT_10_04_2021/results/FINAL_HCPTemplate07mmSpace_piriform_seg/Right_BigBrainSeg01mm_piriform_label-5_in_HCPtemplateSegSpace07mm_SmoothedFWHM07mm_Downsampled.nii.gz'
+#  lpiriform: '/scratch/nchris5/snakeBigBrainSeg_to_HCPSubjectSpaceSeg_CURRENT_09-04-2021/results/FINAL_HCPTemplate07mmSpace_piriform_seg/Left_BigBrainSeg01mm_piriform_label-5_in_HCPtemplateSegSpace07mm_SmoothedFWHM07mm_Downsampled.nii.gz'
 
 #to apply to masks in target space before tracking, and template-space before grouping..
 prob_seg_threshold: 0.5
@@ -21,7 +21,7 @@ ants_warp_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7
 ants_ref_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7Tsubj_07mm/results/iter_1/template_T1w.nii.gz
 
 #list of ROIs in target segmentations 
-targets_txt: resources/hcp_mmp_sym_180.txt
+targets_txt: resources/hcp_mmp_sym_removePiriform_179.txt
 
 #bedpost
 ###fsl_bedpost_dir: /project/6007967/akhanf/projects/hcp/HCP_1200_T1w_Diffusion_FS
@@ -46,19 +46,17 @@ probtrack_tractmap:
 
 #---- for subworkflow: hcp_mmp_to_native ----"
 singularity_freesurfer: /project/6050199/akhanf/singularity/bids-apps/khanlab_freesurfer_v6.0.1-subfields.img
-singularity_connectome_workbench: /project/6007967/software/transparentsingularity/connectome-workbench_1.4.1_20191117.simg/connectome-workbench_1.4.1_20191117.simg 
+singularity_connectome_workbench: /project/6050199/software/transparentsingularity/connectome-workbench_1.4.1_20191117.simg/connectome-workbench_1.4.1_20191117.simg 
 
 #path to your freesurfer license file:
 fs_license: /project/6050199/akhanf/opt/freesurfer/.license
 
 #path to subject freesurfer dir (containing surf/ and mri/ subfolders) 
 # use the {subject} wildcard here.. 
-in_freesurfer: /scratch/nchris5/HCP_template_piriform_segmentations/HCP_1200_freesurfer_unzipped/{subject}
+in_freesurfer: /project/6050199/nchris5/Piriform_Parcellation_Project/HCP_1200_freesurfer_unzipped/{subject}
 
 
-
-
-#---- unused currently, need to create bedpost gpu rule --- "
+#path to HCP 7T diffusion data
 dwi_preproc_dir: /project/6007967/akhanf/projects/hcp/HCP_1200_T1w_Diffusion_FS
 #paths relative to dwi_preproc_dir - needs to be preprocessed dwi in T1w space
 in_dwi_nii: '{subject}/T1w/Diffusion_7T/data.nii.gz'
