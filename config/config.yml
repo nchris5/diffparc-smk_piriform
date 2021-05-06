@@ -1,5 +1,5 @@
 
-participants_tsv: 'config/participants_testing.tsv'
+participants_tsv: 'config/participants_testing3subjs.tsv'
 
 
 #singularity containers:
@@ -20,8 +20,18 @@ ants_invwarp_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hc
 ants_warp_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7Tsubj_07mm/results/iter_1/sub-{subject}_1Warp.nii.gz
 ants_ref_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7Tsubj_07mm/results/iter_1/template_T1w.nii.gz
 
-#list of ROIs in target segmentations 
-targets_txt: resources/hcp_mmp_sym_removePiriform_179.txt
+
+
+#When lhrh_targets_independent_condition set to TRUE: 358 regions; Analyze connectivity of piriform segmentation within each hemisphere independently (considers each lh and rh region to be separate/different between hemispheres)
+##When lhrh_targets_independent_condition set to FALSE: 179 regions; Analyze connectivity of piriform segmentation irrespective of hemispheres (considers each lh and rh region to be a combined single region across hemispheres)
+lhrh_targets_independent_condition: True
+
+#list of ROIs in target segmentations
+targets_txt_lh-rh_separate_358regions: resources/hcp_mmp_sym_removePiriform_LRseparate_380_Regions_L1-179_R180-378.txt
+
+targets_txt_lh-rh_combined_179regions: resources/hcp_mmp_sym_removePiriform_179.txt 
+
+
 
 #bedpost
 ###fsl_bedpost_dir: /project/6007967/akhanf/projects/hcp/HCP_1200_T1w_Diffusion_FS
