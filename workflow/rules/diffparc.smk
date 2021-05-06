@@ -1,14 +1,47 @@
 #
-rule combine_lr_hcp:
-    input:
-        lh = 'results/hcp_mmp/sub-{subject}/lh_removepir.native.hcp-mmp.nii.gz',
-        rh = 'results/hcp_mmp/sub-{subject}/rh_removepir.native.hcp-mmp.nii.gz'
-    output:
-        lh_rh = 'results/diffparc/sub-{subject}/masks/lh_rh.native.hcp-mmp.nii.gz'
-    container: config['singularity_neuroglia']
-    log: 'logs/combine_lr_hcp/{subject}.log'
-    group: 'hcp_mmp_subj'
-    shell: 'fslmaths {input.lh} -max {input.rh} {output.lh_rh} &> {log}'
+#THIS commented one is old and does not relabel 111-180 --> 110-179
+#Note that lhANDrh both = 1-180 but there is no 110 value as the piriform was removed = 179 regions
+#rule combine_lr_hcp:
+#    input:
+#        lh = 'results/hcp_mmp/sub-{subject}/lh_removepir.native.hcp-mmp.nii.gz',
+#        rh = 'results/hcp_mmp/sub-{subject}/rh_removepir.native.hcp-mmp.nii.gz'
+#    output:
+#        lh_rh = 'results/diffparc/sub-{subject}/masks/lh_rh.native.hcp-mmp.nii.gz'
+#    container: config['singularity_neuroglia']
+#    log: 'logs/combine_lr_hcp/{subject}.log'
+#    group: 'hcp_mmp_subj'
+#    shell: 'fslmaths {input.lh} -max {input.rh} {output.lh_rh} &> {log}'
+
+
+
+#When lhrh_targets_independent_condition set to TRUE: Analyze connectivity of piriform segmentation within each hemisphere independently (considers each lh and rh region to be separate/different between hemispheres)
+###Note that lh = 1-179 and rh = 180-358 and the values 110-179 and 290-358 were shifted 1 from initial positions for continuity of label values after the piriform 110 was removed
+
+#When lhrh_targets_independent_condition set to FALSE: Analyze connectivity of piriform segmentation irrespective of hemispheres (consdiers each lh and rh region to be a combined single region across hemispheres)
+###Note that lhANDrh both = 1-179 and the values 110-179 were shifted 1 from initial positions for continuity of label values after the piriform 110 was removed
+if config['lhrh_targets_independent_condition']:
+    rule combine_lr_hcp:
+        input:
+            lh = 'results/hcp_mmp/sub-{subject}/lh_space-native_label-hcpmmp_removepir110_relabelled_1-179.nii.gz',
+            rh = 'results/hcp_mmp/sub-{subject}/rh_space-native_label-hcpmmp_removepir290_relabelled_180-358.nii.gz',
+        output:
+            lh_rh = 'results/diffparc/sub-{subject}/masks/lh_rh_space-native_label-hcpmmp_removepir110_290_relabelled_1-358.nii.gz'
+        container: config['singularity_neuroglia']
+        log: 'logs/combine_lr_hcp/{subject}.log'
+        group: 'hcp_mmp_subj'
+        shell: 'fslmaths {input.lh} -max {input.rh} {output.lh_rh} &> {log}'
+else:
+    rule combine_lr_hcp:
+        input:
+            lh = 'results/hcp_mmp/sub-{subject}/lh_space-native_label-hcpmmp_removepir110_relabelled_1-179.nii.gz',
+            rh = 'results/hcp_mmp/sub-{subject}/rh_space-native_label-hcpmmp_removepir110_relabelled_1-179.nii.gz',
+        output:
+            lh_rh = 'results/diffparc/sub-{subject}/masks/lh_rh_space-native_label-hcpmmp_removepir110_relabelled_1-179.nii.gz'
+        container: config['singularity_neuroglia']
+        log: 'logs/combine_lr_hcp/{subject}.log'
+        group: 'hcp_mmp_subj'
+        shell: 'fslmaths {input.lh} -max {input.rh} {output.lh_rh} &> {log}'
+
 
 
 rule get_template_seed:
@@ -110,6 +143,7 @@ rule binarize_dwi_brainmask:
     shell:
         'fslmaths {input.dwi} -bin {output.mask} &> {log}'
 
+
 rule resample_targets:
     input:
         mask = rules.binarize_dwi_brainmask.output.mask,
@@ -138,7 +172,7 @@ rule resample_seed:
     shell:
         #Linear interp here now, since probabilistic seg
         'antsApplyTransforms -d 3 --interpolation Linear -i {input.seed} -o {output.seed_res} -r {input.mask} &> {log}'
-###End of DEFAULT version if want to perofrm probtrack at the HCP_7T_Diffusion resolution
+###End of DEFAULT version if want to perform probtrack at the HCP_7T_Diffusion resolution
 
 
 rule binarize_subject_seed:
@@ -154,30 +188,63 @@ rule binarize_subject_seed:
         'fslmaths {input} -thr {params.threshold} -bin {output} &> {log}'
          
 
-
-rule split_targets:
-    input: 
-        targets_res = 'results/diffparc/sub-{subject}/masks/lh_rh_targets_resampled_dwi_resolution.nii.gz',
-    params:
-        target_nums = lambda wildcards: [str(i) for i in range(1,len(targets)+2) if i != 110],
-        target_seg = expand('results/diffparc/sub-{subject}/targets/{target}.nii.gz',target=targets,allow_missing=True)
+#The piriform seed overlaps adjacent atlas targets, so in subject space the target voxels that overlapped seed voxels are removed. First the binarized piriform seed is given a large value (1000) and then the maximum between the seed and targets is taken and the piriform is then removed from the targets.
+rule remove_piriform_target_overlap:
+    input:
+        seed_res_bin = rules.binarize_subject_seed.output,
+        targets_res = rules.resample_targets.output.targets_res
     output:
-        target_seg_dir = directory('results/diffparc/sub-{subject}/targets')
+        targets_pir_overlap_removed = 'results/diffparc/sub-{subject}/masks/lh_rh_targets_from-{template}_resampled_dwi_resolution_{seed}_overlap_removed.nii.gz'
     container: config['singularity_neuroglia']
-    log: 'logs/split_targets/sub-{subject}.log'
-    threads: 32 
+    log: 'logs/remove_piriform_target_overlap/sub-{subject}_{template}_{seed}.log'
+    group: 'hcp_mmp_subj'
+    shell:
+        'fslmaths {input.seed_res_bin} -mul 1000 -max {input.targets_res} -uthr 999 {output.targets_pir_overlap_removed} &> {log}'
+        
+
+
+#THIS commented one is old and does not relabel 111-180 --> 110-179
+#rule split_targets:
+#    input:
+#        targets_res = 'results/diffparc/sub-{subject}/masks/lh_rh_targets_resampled_dwi_resolution.nii.gz',
+#    params:
+#        target_nums = lambda wildcards: [str(i) for i in range(1,len(targets)+2) if i != 110],
+#        target_seg = expand('results/diffparc/sub-{subject}/targets/{target}.nii.gz',target=targets,allow_missing=True)
+#    output:
+#        target_seg_dir = directory('results/diffparc/sub-{subject}/targets')
+#    container: config['singularity_neuroglia']
+#    log: 'logs/split_targets/sub-{subject}.log'
+#    threads: 32
+#    group: 'hcp_mmp_subj'
+#    shell:
+#        'mkdir -p {output} && parallel  --jobs {threads} fslmaths {input.targets_res} -thr {{1}} -uthr {{1}} -bin {{2}} &> {log} ::: {params.target_nums} :::+ {params.target_seg}'
+
+#Note that in Ali's diffparc the target nums is [str(i) for i in range(len(targets))], which skips V1 since it has a value of 1 and this numbering starts at 0 in this form
+rule split_targets:
+    input:
+        targets_res = rules.remove_piriform_target_overlap.output.targets_pir_overlap_removed,
+    params:
+        target_nums = lambda wildcards: [str(i) for i in range(1,len(targets)+1)],
+        target_seg = expand('results/diffparc/sub-{subject}/targets_from-{template}_{seed}_overlap_removed/{target}.nii.gz',target=targets,allow_missing=True)
+    output:
+        target_seg_dir = directory('results/diffparc/sub-{subject}/targets_from-{template}_{seed}_overlap_removed')
+    container: config['singularity_neuroglia']
+    log: 'logs/split_targets/sub-{subject}_{template}_{seed}.log'
+    threads: 32
     group: 'hcp_mmp_subj'
     shell:
         'mkdir -p {output} && parallel  --jobs {threads} fslmaths {input.targets_res} -thr {{1}} -uthr {{1}} -bin {{2}} &> {log} ::: {params.target_nums} :::+ {params.target_seg}'
+
+
 
 rule gen_targets_txt:
     input:
         target_seg_dir = rules.split_targets.output.target_seg_dir
     params:
-        target_seg = expand('results/diffparc/sub-{subject}/targets/{target}.nii.gz',target=targets,allow_missing=True)
+        target_seg = expand('results/diffparc/sub-{subject}/targets_from-{template}_{seed}_overlap_removed/{target}.nii.gz',target=targets,allow_missing=True)
     output:
-        target_txt = 'results/diffparc/sub-{subject}/target_images.txt'
-    log: 'logs/get_targets_txt/sub-{subject}.log'
+        target_txt = 'results/diffparc/sub-{subject}/target_images_from-{template}_{seed}_overlap_removed.txt'
+    log: 'logs/get_targets_txt/sub-{subject}_{template}_{seed}.log'
     group: 'hcp_mmp_subj'
     run:
         f = open(output.target_txt,'w')
@@ -201,13 +268,13 @@ rule run_probtrack:
         container = config['singularity_cuda']
     output:
         probtrack_dir = directory('results/diffparc/sub-{subject}/probtrack_{template}_{seed}')
-    threads: 8
+    threads: 16
     resources: 
-        mem_mb = 32000, 
+        mem_mb = 64000, 
         time = 30, #30 mins
         gpus = 1 #1 gpu
     log: 'logs/run_probtrack/{template}_sub-{subject}_{seed}.log'
-    group: 'hcp_mmp_subj'
+    group: 'probtrack'
     shell:
         'mkdir -p {output.probtrack_dir} && singularity exec -e --nv {params.container} probtrackx2_gpu --samples={params.bedpost_merged} --mask={input.mask} --seed={input.seed_res} --targetmasks={input.target_txt} --seedref={input.seed_res} --nsamples={params.nsamples} --dir={output.probtrack_dir} {params.probtrack_opts} -V 2  &> {log}' 
 
@@ -230,7 +297,7 @@ rule transform_conn_to_template:
     resources:
         mem_mb = 128000
     log: 'logs/transform_conn_to_template/sub-{subject}_{seed}_{template}.log'
-    group: 'hcp_mmp_subj'
+    group: 'post_track'
     shell:
         'mkdir -p {output} && ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1 parallel  --jobs {threads} antsApplyTransforms -d 3 --interpolation Linear -i {{1}} -o {{2}}  -r {input.ref} -t {input.warp} -t {input.affine} &> {log} :::  {params.in_connmap_3d} :::+ {params.out_connmap_3d}' 
 
@@ -246,7 +313,7 @@ rule save_connmap_template_npz:
     output:
         connmap_npz = 'results/diffparc/sub-{subject}/connmap/sub-{subject}_space-{template}_seed-{seed}_connMap.npz'
     log: 'logs/save_connmap_to_template_npz/sub-{subject}_{seed}_{template}.log'
-    group: 'hcp_mmp_subj'
+    group: 'post_track'
     conda: '../envs/sklearn.yml'
     script: '../scripts/save_connmap_template_npz.py'
 
@@ -262,6 +329,8 @@ rule gather_connmap_group:
     conda: '../envs/sklearn.yml'
     group: 'group_post_track'
     script: '../scripts/gather_connmap_group.py'
+
+
      
 rule spectral_clustering:
     input:
@@ -293,34 +362,70 @@ rule save_connmapClusters_template_npz:
     group: 'post_track_b'
     script: '../scripts/save_connmapClusters_template_npz.py'
 
-rule gather_connmapClusters_group:
-    input:
-        connmap_Clusters_npz_dir = expand('results/connmapClusters/sub-{subject}/connmap_{seed}_{template}/sub-{subject}_space-{template}_seed-{seed}_k-{k}',subject=subjects,k=range(2,config['max_k']+1),allow_missing=True),
-    params:
-        max_k = config['max_k'],
-        connmap_Clusters_group_npz_dir_base = directory('results/connmapClusters/connmapGroup_{seed}_{template}')
-    output:
-        connmap_Clusters_group_npz_dir = directory(expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',k=range(2,config['max_k']+1),allow_missing=True))
-    log: 'logs/gather_connmapClusters_group/{seed}_{template}.log'
-    conda: '../envs/sklearn.yml'
-    group: 'groupC_post_track'
-    script: '../scripts/gather_connmapClusters_group.py'
+
+if config['lhrh_targets_independent_condition']:
+    rule gather_connmapClusters_group:
+        input:
+            connmap_Clusters_npz_dir = expand('results/connmapClusters/sub-{subject}/connmap_{seed}_{template}/sub-{subject}_space-{template}_seed-{seed}_k-{k}',subject=subjects,k=range(2,config['max_k']+1),allow_missing=True),
+        params:
+            max_k = config['max_k'],
+            connmap_Clusters_group_npz_dir_base = directory('results/connmapClusters/connmapGroup_{seed}_{template}'),
+            num_targets = 358
+        output:
+            connmap_Clusters_group_npz_dir = directory(expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',k=range(2,config['max_k']+1),allow_missing=True))
+        log: 'logs/gather_connmapClusters_group/{seed}_{template}.log'
+        conda: '../envs/sklearn.yml'
+        threads: 8
+        group: 'groupC_post_track'
+        script: '../scripts/gather_connmapClusters_group.py'
+else:
+    rule gather_connmapClusters_group:
+        input:
+            connmap_Clusters_npz_dir = expand('results/connmapClusters/sub-{subject}/connmap_{seed}_{template}/sub-{subject}_space-{template}_seed-{seed}_k-{k}',subject=subjects,k=range(2,config['max_k']+1),allow_missing=True),
+        params:
+            max_k = config['max_k'],
+            connmap_Clusters_group_npz_dir_base = directory('results/connmapClusters/connmapGroup_{seed}_{template}'),
+            num_targets = 179
+        output:
+            connmap_Clusters_group_npz_dir = directory(expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',k=range(2,config['max_k']+1),allow_missing=True))
+        log: 'logs/gather_connmapClusters_group/{seed}_{template}.log'
+        conda: '../envs/sklearn.yml'
+        threads: 8
+        group: 'groupC_post_track'
+        script: '../scripts/gather_connmapClusters_group.py' 
 
 
 
-rule create_gephi_input_nodes_and_edge_tables:
-    input:
-        connmap_Clusters_group_dir = expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',template=config['template'],k=range(2,config['max_k']+1),allow_missing=True),
-    params:
-        seeds_py = list(config['template_prob_seg'].keys()),
-        max_k = config['max_k'],
-        connmapClusters_dir = 'results/connmapClusters',
-        GlasserTable_22regions_colours = 'resources/Glasser_2016_Table_BoldSections_Manually_Identified_removePiriform110_convcsv.csv'
-    log: 'logs/create_gephi_input_nodes_and_edge_tables/Gephi_Input_NodesandEdges_{seed}.log'
-    conda: '../envs/sklearn.yml'
-    group: 'groupGephipost_track'
-    output:
-        Gephi_Nodes_and_Edges_Tables_dir = directory('results/gephi_input_NodesandEdges_tables_{seed}')
-    script: '../scripts/create_connmapClusters_group_GephiNodes_and_Edges_Tables.py'
-
+if config['lhrh_targets_independent_condition']:
+    rule create_gephi_input_nodes_and_edge_tables:
+        input:
+            connmap_Clusters_group_dir = expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',template=config['template'],k=range(2,config['max_k']+1),allow_missing=True),
+        params:
+            seeds_py = list(config['template_prob_seg'].keys()),
+            max_k = config['max_k'],
+            connmapClusters_dir = 'results/connmapClusters',
+            num_targets = 358,
+            GlasserTable_22regions_colours = 'resources/Glasser_2016_Table_BoldSections_Manually_Identified_removePiriform_LRseparate_380_Regions_relabelled_L1-179_R180-378_convcsv.csv',
+        log: 'logs/create_gephi_input_nodes_and_edge_tables/Gephi_Input_NodesandEdges_{seed}.log'
+        conda: '../envs/sklearn.yml'
+        group: 'groupGephipost_track'
+        output:
+            Gephi_Nodes_and_Edges_Tables_dir = directory('results/gephi_input_NodesandEdges_tables_{seed}')
+        script: '../scripts/create_connmapClusters_group_GephiNodes_and_Edges_Tables.py'
+else:
+    rule create_gephi_input_nodes_and_edge_tables:
+        input:
+            connmap_Clusters_group_dir = expand('results/connmapClusters/connmapGroup_{seed}_{template}_k-{k}',template=config['template'],k=range(2,config['max_k']+1),allow_missing=True),
+        params:
+            seeds_py = list(config['template_prob_seg'].keys()),
+            max_k = config['max_k'],
+            connmapClusters_dir = 'results/connmapClusters',
+            num_targets = 179,
+            GlasserTable_22regions_colours = 'resources/Glasser_2016_Table_BoldSections_Manually_Identified_removePiriform110_convcsv.csv'
+        log: 'logs/create_gephi_input_nodes_and_edge_tables/Gephi_Input_NodesandEdges_{seed}.log'
+        conda: '../envs/sklearn.yml'
+        group: 'groupGephipost_track'
+        output:
+            Gephi_Nodes_and_Edges_Tables_dir = directory('results/gephi_input_NodesandEdges_tables_{seed}')
+        script: '../scripts/create_connmapClusters_group_GephiNodes_and_Edges_Tables.py'
 
