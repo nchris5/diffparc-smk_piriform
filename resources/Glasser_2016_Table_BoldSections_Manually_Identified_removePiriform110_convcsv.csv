@@ -108,73 +108,73 @@ ParcelIndex,AreaName,AreaDescription,New?,Sections,SectionsBOLD,ColourRGB,OtherN
 107,TA2,Area TA2,No,"10,11,12",11,"0,190,251",TE1.2
 108,FOP4,"Frontal OPercular Area 4",Yes,"9,12,21",12,"216,99,9",
 109,MI,Middle Insular Area,Yes*,12,12,"216,99,9",Ial
-111,AVI,Anterior Ventral Insular Area,Yes*,"12,20,21",12,"216,99,9",Iai
-112,AAIC,"Anterior Agranular Insula Complex",Yes*,"12,20",12,"216,99,9","Iai, Ial"
-113,FOP1,"Frontal OPercular Area 1",Yes,"8,9,12",9,"180,55,103",
-114,FOP3,"Frontal OPercular Area 3",Yes,12,12,"216,99,9",
-115,FOP2,"Frontal OPercular Area 2",Yes,"9,12",12,"216,99,9",
-116,PFt,Area PFt,No,"6,16,17",17,"110,203,201",
-117,AIP,"Anterior IntraParietal Area",Yes*,"6,16,17",16,"75,59,69",
-118,EC,Entorhinal Cortex,No,13,13,"240,182,199",28
-119,PreS,PreSubiculum,No,"2,13,18",13,"240,182,199","Sub, Subicular"
-120,H,Hippocampus,No,13,13,"240,182,199",
-121,ProS,ProStriate Area,No,"1,2,13,18",18,"247,126,247",
-122,PeEc,Perirhinal Ectorhinal Cortex,Yes*,"13,14",13,"240,182,199","ATFP, AFP1, Ectorhinal, Perirhinal, 35, 36"
-123,STGa,Area STGa,Yes,"11,12,14",11,"0,190,251",
-124,PBelt,ParaBelt Complex,Yes*,"10,11",10,"230,98,192","ParaBelt, TA1"
-125,A5,Auditory 5 Complex,Yes,"11,15",11,"0,190,251",
-126,PHA1,"ParaHippocampal Area 1",Yes,"2,4,13",13,"240,182,199",
-127,PHA3,ParaHippocampal Area 3,Yes,"4,13,14",13,"240,182,199",
-128,STSda,Area STSd anterior,Yes,"11,14",11,"0,190,251",
-129,STSdp,Area STSd posterior,Yes,"11,15",11,"0,190,251",
-130,STSvp,Area STSv posterior,Yes,"11,14,15",11,"0,190,251",
-131,TGd,Area TG dorsal,Yes*,"11,12,13,14",14,"246,83,118",TG
-132,TE1a,Area TE1 anterior,Yes*,"11,14",14,"246,83,118",
-133,TE1p,Area TE1 posterior,Yes*,"5,11,14",14,"246,83,118",
-134,TE2a,Area TE2 anterior,Yes*,14,14,"246,83,118",
-135,TF,Area TF,No,"4,13,14",13,"240,182,199",
-136,TE2p,Area TE2 posterior,Yes*,"4,5,14",14,"246,83,118",
-137,PHT,Area PHT,No,"5,11,14,15",14,"246,83,118",
-138,PH,Area PH,No,"4,5,14",5,"184,60,27",
-139,TPOJ1,"Area TemporoParietoOcci pital Junction 1",Yes,"11,14,15,17",15,"0,92,66",
-140,TPOJ2,"Area TemporoParietoOcci pital Junction 2",Yes,"5,14,15,17",15,"0,92,66",
-141,TPOJ3,"Area TemporoParietoOcci pital Junction 3",Yes,"5,15,17",15,"0,92,66",
-142,DVT,"Dorsal Transitional Visual Area",Yes,"2,3,16,18",18,"247,126,247",
-143,PGp,Area PGp,No,"5,15,17",17,"110,203,201","39,PG"
-144,IP2,Area IntraParietal 2,No,"16,17",17,"110,203,201",
-145,IP1,Area IntraParietal 1,No,"16,17",17,"110,203,201",
-146,IP0,Area IntraParietal 0,Yes,"3,5,16,17",17,"110,203,201",
-147,PFop,Area PF opercular,No,"6,9,17",17,"110,203,201","40, 72"
-148,PF,Area PF Complex,No,"9,15,17",17,"110,203,201","40, 88"
-149,PFm,Area PFm Complex,No,"15,17",17,"110,203,201","40, 89"
-150,PGi,Area PGi,No,"15,17",17,"110,203,201","PGa, 39, PG, 90"
-151,PGs,Area PGs,No,"15,17",17,"110,203,201","PGa, 39, PG, 90"
-152,V6A,Area V6A,No,"3,18",3,"173,192,0",112
-153,VMV1,"VentroMedial Visual Area 1",Yes*,"2,4,13",4,"68,53,0","PHC2, PHC-2"
-154,VMV3,"VentroMedial Visual Area 3",Yes*,"2,4,13",4,"68,53,0",VO2
-155,PHA2,"ParaHippocampal Area 2",Yes,"4,13",13,"240,182,199",
-156,V4t,Area V4t,No,5,5,"184,60,27",LO2
-157,FST,Area FST,No,"5,14,15",5,"184,60,27",
-158,V3CD,Area V3CD,Yes,"2,3,5,17",5,"184,60,27","V3A,V3B, hOC4la"
-159,LO3,"Area Lateral Occipital 3",Yes,"5,15,17",5,"184,60,27",hOC4la
-160,VMV2,"VentroMedial Visual Area 2",Yes*,"2,4,13",4,"68,53,0","PHC1, PHC-1"
-161,31pd,Area 31pd,Yes*,18,18,"247,126,247","31, 31d, 31v"
-162,31a,Area 31a,Yes*,18,18,"247,126,247","31, 31d, 31v"
-163,VVC,Ventral Visual Complex,Yes*,"4,13,14",4,"68,53,0","VO1, VO2, PHC1, PHC2, PHC-1, PHC-2, FG1"
-164,25,Area 25,No,"19,20",19,"52,134,17",
-165,s32,Area s32,No,19,19,"52,134,17","32pl, 32"
-166,pOFC,posterior OFC Complex,Yes*,"12,19,20",19,"52,134,17","13a, 14c, Fo2"
-167,PoI1,"Area Posterior Insular 1",Yes*,12,12,"216,99,9","Id1, Id2, Id3"
-168,Ig,"Insular Granular Complex",Yes*,"9,12",12,"216,99,9","Ig1, Ig2"
-169,FOP5,"Area Frontal Opercular 5",Yes,"12,21",12,"216,99,9",PrCO
-170,p10p,Area posterior 10p,Yes*,"20,22",20,"44,224,0","10p, 10, Fp1"
-171,p47r,Area posterior 47r,Yes*,"20,21,22",21,"0,163,117",47r
-172,TGv,Area TG Ventral,Yes*,"13,14",14,"246,83,118",
-173,MBelt,Medial Belt Complex,Yes*,"10,12",10,"230,98,192","Belt, TB"
-174,LBelt,Lateral Belt Complex,Yes*,10,10,"230,98,192","Belt, TB"
-175,A4,Auditory 4 Complex,Yes*,"11,15",11,"0,190,251",TE3
-176,STSva,Area STSv anterior,Yes,"11,14",11,"0,190,251",
-177,TE1m,Area TE1 Middle,Yes*,"11,14",14,"246,83,118",
-178,PI,Para-Insular Area,No,"11,12,14",12,"216,99,9",IBT
-179,a32pr,"Area anterior 32 prime",Yes*,19,19,"52,134,17",32'
-180,p24,Area posterior 24,Yes*,19,19,"52,134,17",24
+110,AVI,Anterior Ventral Insular Area,Yes*,"12,20,21",12,"216,99,9",Iai
+111,AAIC,"Anterior Agranular Insula Complex",Yes*,"12,20",12,"216,99,9","Iai, Ial"
+112,FOP1,"Frontal OPercular Area 1",Yes,"8,9,12",9,"180,55,103",
+113,FOP3,"Frontal OPercular Area 3",Yes,12,12,"216,99,9",
+114,FOP2,"Frontal OPercular Area 2",Yes,"9,12",12,"216,99,9",
+115,PFt,Area PFt,No,"6,16,17",17,"110,203,201",
+116,AIP,"Anterior IntraParietal Area",Yes*,"6,16,17",16,"75,59,69",
+117,EC,Entorhinal Cortex,No,13,13,"240,182,199",28
+118,PreS,PreSubiculum,No,"2,13,18",13,"240,182,199","Sub, Subicular"
+119,H,Hippocampus,No,13,13,"240,182,199",
+120,ProS,ProStriate Area,No,"1,2,13,18",18,"247,126,247",
+121,PeEc,Perirhinal Ectorhinal Cortex,Yes*,"13,14",13,"240,182,199","ATFP, AFP1, Ectorhinal, Perirhinal, 35, 36"
+122,STGa,Area STGa,Yes,"11,12,14",11,"0,190,251",
+123,PBelt,ParaBelt Complex,Yes*,"10,11",10,"230,98,192","ParaBelt, TA1"
+124,A5,Auditory 5 Complex,Yes,"11,15",11,"0,190,251",
+125,PHA1,"ParaHippocampal Area 1",Yes,"2,4,13",13,"240,182,199",
+126,PHA3,ParaHippocampal Area 3,Yes,"4,13,14",13,"240,182,199",
+127,STSda,Area STSd anterior,Yes,"11,14",11,"0,190,251",
+128,STSdp,Area STSd posterior,Yes,"11,15",11,"0,190,251",
+129,STSvp,Area STSv posterior,Yes,"11,14,15",11,"0,190,251",
+130,TGd,Area TG dorsal,Yes*,"11,12,13,14",14,"246,83,118",TG
+131,TE1a,Area TE1 anterior,Yes*,"11,14",14,"246,83,118",
+132,TE1p,Area TE1 posterior,Yes*,"5,11,14",14,"246,83,118",
+133,TE2a,Area TE2 anterior,Yes*,14,14,"246,83,118",
+134,TF,Area TF,No,"4,13,14",13,"240,182,199",
+135,TE2p,Area TE2 posterior,Yes*,"4,5,14",14,"246,83,118",
+136,PHT,Area PHT,No,"5,11,14,15",14,"246,83,118",
+137,PH,Area PH,No,"4,5,14",5,"184,60,27",
+138,TPOJ1,"Area TemporoParietoOcci pital Junction 1",Yes,"11,14,15,17",15,"0,92,66",
+139,TPOJ2,"Area TemporoParietoOcci pital Junction 2",Yes,"5,14,15,17",15,"0,92,66",
+140,TPOJ3,"Area TemporoParietoOcci pital Junction 3",Yes,"5,15,17",15,"0,92,66",
+141,DVT,"Dorsal Transitional Visual Area",Yes,"2,3,16,18",18,"247,126,247",
+142,PGp,Area PGp,No,"5,15,17",17,"110,203,201","39,PG"
+143,IP2,Area IntraParietal 2,No,"16,17",17,"110,203,201",
+144,IP1,Area IntraParietal 1,No,"16,17",17,"110,203,201",
+145,IP0,Area IntraParietal 0,Yes,"3,5,16,17",17,"110,203,201",
+146,PFop,Area PF opercular,No,"6,9,17",17,"110,203,201","40, 72"
+147,PF,Area PF Complex,No,"9,15,17",17,"110,203,201","40, 88"
+148,PFm,Area PFm Complex,No,"15,17",17,"110,203,201","40, 89"
+149,PGi,Area PGi,No,"15,17",17,"110,203,201","PGa, 39, PG, 90"
+150,PGs,Area PGs,No,"15,17",17,"110,203,201","PGa, 39, PG, 90"
+151,V6A,Area V6A,No,"3,18",3,"173,192,0",112
+152,VMV1,"VentroMedial Visual Area 1",Yes*,"2,4,13",4,"68,53,0","PHC2, PHC-2"
+153,VMV3,"VentroMedial Visual Area 3",Yes*,"2,4,13",4,"68,53,0",VO2
+154,PHA2,"ParaHippocampal Area 2",Yes,"4,13",13,"240,182,199",
+155,V4t,Area V4t,No,5,5,"184,60,27",LO2
+156,FST,Area FST,No,"5,14,15",5,"184,60,27",
+157,V3CD,Area V3CD,Yes,"2,3,5,17",5,"184,60,27","V3A,V3B, hOC4la"
+158,LO3,"Area Lateral Occipital 3",Yes,"5,15,17",5,"184,60,27",hOC4la
+159,VMV2,"VentroMedial Visual Area 2",Yes*,"2,4,13",4,"68,53,0","PHC1, PHC-1"
+160,31pd,Area 31pd,Yes*,18,18,"247,126,247","31, 31d, 31v"
+161,31a,Area 31a,Yes*,18,18,"247,126,247","31, 31d, 31v"
+162,VVC,Ventral Visual Complex,Yes*,"4,13,14",4,"68,53,0","VO1, VO2, PHC1, PHC2, PHC-1, PHC-2, FG1"
+163,25,Area 25,No,"19,20",19,"52,134,17",
+164,s32,Area s32,No,19,19,"52,134,17","32pl, 32"
+165,pOFC,posterior OFC Complex,Yes*,"12,19,20",19,"52,134,17","13a, 14c, Fo2"
+166,PoI1,"Area Posterior Insular 1",Yes*,12,12,"216,99,9","Id1, Id2, Id3"
+167,Ig,"Insular Granular Complex",Yes*,"9,12",12,"216,99,9","Ig1, Ig2"
+168,FOP5,"Area Frontal Opercular 5",Yes,"12,21",12,"216,99,9",PrCO
+169,p10p,Area posterior 10p,Yes*,"20,22",20,"44,224,0","10p, 10, Fp1"
+170,p47r,Area posterior 47r,Yes*,"20,21,22",21,"0,163,117",47r
+171,TGv,Area TG Ventral,Yes*,"13,14",14,"246,83,118",
+172,MBelt,Medial Belt Complex,Yes*,"10,12",10,"230,98,192","Belt, TB"
+173,LBelt,Lateral Belt Complex,Yes*,10,10,"230,98,192","Belt, TB"
+174,A4,Auditory 4 Complex,Yes*,"11,15",11,"0,190,251",TE3
+175,STSva,Area STSv anterior,Yes,"11,14",11,"0,190,251",
+176,TE1m,Area TE1 Middle,Yes*,"11,14",14,"246,83,118",
+177,PI,Para-Insular Area,No,"11,12,14",12,"216,99,9",IBT
+178,a32pr,"Area anterior 32 prime",Yes*,19,19,"52,134,17",32'
+179,p24,Area posterior 24,Yes*,19,19,"52,134,17",24
