@@ -23,12 +23,14 @@ Snakemake workflow overview for diffusion-based parcellation of the piriform cor
    * ```ants_warp_nii```: Warp from subject-->template
    * ```ants_ref_nii```: Study-specific T1w created from: [ants_build_template_smk]
 
-6. ```targets_txt```: List of ROIs in atlas segmentations to use as targets for piriform connectivity (default hcp_mmp_sym_180)
-7. ```max_k```: Maximum number of clusters to create during spectral clustering (will create all cluster solutions <= max_k)
-8. ```probtrack```: Tractography parameters, seed_resolution defines the resolution to resample all other inputs to
-9. ```probtrack_tractmap```: Tractography parameters to generate individual tractmaps for each cluster following spectral clustering (useful for visualization)
-10. ```in_freesurfer```: Path to subject freesurfer dir from HCP_1200 release
-11. ```dwi_preproc_dir```: Path to base directory containing the HCP 7T diffusion data for all subjects
+6. ```lhrh_targets_independent_condition```: When set to "True": 358 regions, analyze connectivity of piriform segmentation within each hemisphere independently (considers each lh and rh region to be separate/different between hemispheres; when set to "false": 179 regions, analyze connectivity of piriform segmentation irrespective of hemispheres (considers each lh and rh region to be a combined single region across hemispheres)
+7. ```targets_txt_lh-rh_separate_358regions```: List of ROIs in atlas segmentations to use as targets for piriform connectivity (358 lh vs. rh)
+8. ```targets_txt_lh-rh_combined_179regions```: List of ROIs in atlas segmentations to use as targets for piriform connectivity (179 lh + rh)
+9. ```max_k```: Maximum number of clusters to create during spectral clustering (will create all cluster solutions <= max_k)
+10. ```probtrack```: Tractography parameters, seed_resolution defines the resolution to resample all other inputs to
+11. ```probtrack_tractmap```: Tractography parameters to generate individual tractmaps for each cluster following spectral clustering (useful for visualization)
+12. ```in_freesurfer```: Path to subject freesurfer dir from HCP_1200 release
+13. ```dwi_preproc_dir```: Path to base directory containing the HCP 7T diffusion data for all subjects
 
    * ```in_dwi_nii```
    * ```in_dwi_bval```
