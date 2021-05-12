@@ -253,30 +253,54 @@ rule gen_targets_txt:
         f.close()
 
 
-
-rule run_probtrack:
-    input:
-        seed_res = rules.binarize_subject_seed.output,
-        target_txt = rules.gen_targets_txt.output.target_txt,
-        mask = rules.binarize_dwi_brainmask.output.mask,
-        target_seg_dir = rules.split_targets.output.target_seg_dir
-    params:
-        bedpost_merged = 'results/Diffusion_7T/{subject}.bedpostX/merged',
-        probtrack_opts = config['probtrack']['opts'],
-        out_target_seg = expand('results/diffparc/sub-{subject}/probtrack_{template}_{seed}/seeds_to_{target}.nii.gz',target=targets,allow_missing=True),
-        nsamples = config['probtrack']['nsamples'],
-        container = config['singularity_cuda']
-    output:
-        probtrack_dir = directory('results/diffparc/sub-{subject}/probtrack_{template}_{seed}')
-    threads: 16
-    resources: 
-        mem_mb = 64000, 
-        time = 30, #30 mins
-        gpus = 1 #1 gpu
-    log: 'logs/run_probtrack/{template}_sub-{subject}_{seed}.log'
-    group: 'probtrack'
-    shell:
-        'mkdir -p {output.probtrack_dir} && singularity exec -e --nv {params.container} probtrackx2_gpu --samples={params.bedpost_merged} --mask={input.mask} --seed={input.seed_res} --targetmasks={input.target_txt} --seedref={input.seed_res} --nsamples={params.nsamples} --dir={output.probtrack_dir} {params.probtrack_opts} -V 2  &> {log}' 
+#If using 378 regions, use probtrackx2; If using 179 regions, use probtrackx2_gpu
+if config['lhrh_targets_independent_condition']:
+    rule run_probtrack:
+        input:
+            seed_res = rules.binarize_subject_seed.output,
+            target_txt = rules.gen_targets_txt.output.target_txt,
+            mask = rules.binarize_dwi_brainmask.output.mask,
+            target_seg_dir = rules.split_targets.output.target_seg_dir
+        params:
+            bedpost_merged = 'results/Diffusion_7T/{subject}.bedpostX/merged',
+            probtrack_opts = config['probtrack']['opts'],
+            out_target_seg = expand('results/diffparc/sub-{subject}/probtrack_{template}_{seed}/seeds_to_{target}.nii.gz',target=targets,allow_missing=True),
+            nsamples = config['probtrack']['nsamples'],
+            container = config['singularity_neuroglia']
+        output:
+            probtrack_dir = directory('results/diffparc/sub-{subject}/probtrack_{template}_{seed}')
+        threads: 16
+        resources:
+            mem_mb = 64000,
+            time = 180 #3hrs if running probtrackx2 without gpu (test ~30 mins so 3hr for safety)
+        log: 'logs/run_probtrack/{template}_sub-{subject}_{seed}.log'
+        group: 'probtrack'
+        shell:
+            'mkdir -p {output.probtrack_dir} && singularity exec -e --nv {params.container} probtrackx2 --samples={params.bedpost_merged} --mask={input.mask} --seed={input.seed_res} --targetmasks={input.target_txt} --seedref={input.seed_res} --nsamples={params.nsamples} --dir={output.probtrack_dir} {params.probtrack_opts} -V 2  &> {log}'
+else:
+    rule run_probtrack:
+        input:
+            seed_res = rules.binarize_subject_seed.output,
+            target_txt = rules.gen_targets_txt.output.target_txt,
+            mask = rules.binarize_dwi_brainmask.output.mask,
+            target_seg_dir = rules.split_targets.output.target_seg_dir
+        params:
+            bedpost_merged = 'results/Diffusion_7T/{subject}.bedpostX/merged',
+            probtrack_opts = config['probtrack']['opts'],
+            out_target_seg = expand('results/diffparc/sub-{subject}/probtrack_{template}_{seed}/seeds_to_{target}.nii.gz',target=targets,allow_missing=True),
+            nsamples = config['probtrack']['nsamples'],
+            container = config['singularity_cuda']
+        output:
+            probtrack_dir = directory('results/diffparc/sub-{subject}/probtrack_{template}_{seed}')
+        threads: 8
+        resources: 
+            mem_mb = 32000, 
+            time = 30, #30 mins if running probtrackx2_gpu
+            gpus = 1 #1 gpu if running probtrackx2_gpu
+        log: 'logs/run_probtrack/{template}_sub-{subject}_{seed}.log'
+        group: 'probtrack'
+        shell:
+            'mkdir -p {output.probtrack_dir} && singularity exec -e --nv {params.container} probtrackx2_gpu --samples={params.bedpost_merged} --mask={input.mask} --seed={input.seed_res} --targetmasks={input.target_txt} --seedref={input.seed_res} --nsamples={params.nsamples} --dir={output.probtrack_dir} {params.probtrack_opts} -V 2  &> {log}' 
 
 
 
