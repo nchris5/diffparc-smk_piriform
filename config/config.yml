@@ -22,8 +22,8 @@ ants_ref_nii: /project/6050199/ext-data/hcp1200/deriv/ants_build_template_hcp_7T
 
 
 
-#When lhrh_targets_independent_condition set to TRUE: 358 regions; Analyze connectivity of piriform segmentation within each hemisphere independently (considers each lh and rh region to be separate/different between hemispheres)
-##When lhrh_targets_independent_condition set to FALSE: 179 regions; Analyze connectivity of piriform segmentation irrespective of hemispheres (considers each lh and rh region to be a combined single region across hemispheres)
+#When lhrh_targets_independent_condition set to TRUE: 358 regions; Analyze connectivity of piriform segmentation within each hemisphere independently (considers each lh and rh region to be separate/different between hemispheres). Uses probtrackx2
+##When lhrh_targets_independent_condition set to FALSE: 179 regions; Analyze connectivity of piriform segmentation irrespective of hemispheres (considers each lh and rh region to be a combined single region across hemispheres). Uses probtrackx2_gpu as this greatly speeds up processing time, but will encounter memory issues when using 358 regions and thus is only used when 179 regions are selected.
 lhrh_targets_independent_condition: True
 
 #list of ROIs in target segmentations
