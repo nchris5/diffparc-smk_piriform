@@ -6,7 +6,7 @@ from scipy import stats
 
 targetnames = pd.read_table('results/diffparc/sub-100610/target_images_from-hcp7Tsubj_rpiriform_overlap_removed.txt', names=['TargetNames'], header=None)
 targetnamesList = targetnames.TargetNames.to_list()
-targetnamesList = [ line.replace('results/diffparc/sub-100610/targets_from-hcp7Tsubj_rpiriform_overlap_removed/','') for line in targetnamesList ] #Remove that string from each line
+targetnamesList = [ line.replace('results/diffparc/sub-100610/lh_rh_targets_from-hcp7Tsubj_rpiriform_space-native_resampled_dwi_resolution_pir-overlap-removed/','') for line in targetnamesList ] #Remove that string from each line
 targetnamesList = [ line.replace('_ROI.nii.gz','') for line in targetnamesList ] #Remove this string from each
 cluster_range = range(2,snakemake.params.max_k+1)
 for i,this_k in enumerate(cluster_range): #For 0,2 1,3 2,4
@@ -50,6 +50,7 @@ for i,this_k in enumerate(cluster_range): #For 0,2 1,3 2,4
         quotients = [number / sum_avg_conn_for_each_target_avggroup for number in avg_conn_for_each_target_avggroup]
         #Create dataframe that includes columns target names and the values of the targets
         df = pd.DataFrame({'targetnames': targetnamesList, 'ConnectivityScore': avg_conn_for_each_target_avggroup, 'ConnectivityScoreNormalized': quotients}, index=range(0,snakemake.params.num_targets))
+        print("Targets prior to sorting based on avg conn for k-%s and label %s = %s" % (this_k, label, df))
         dfsorted = df.sort_values(by='ConnectivityScoreNormalized', ascending=False) #Sort the target regions descending
         print("Targets sorted based on avg conn for k-%s and label %s = %s" % (this_k, label, dfsorted))
         #Plot the 10 targets with the highest connectivity to the piriform
@@ -67,4 +68,4 @@ for i,this_k in enumerate(cluster_range): #For 0,2 1,3 2,4
         label +=1
     figuresavestring = '{newClusterGroupDir}/k-{thisk}_Individual_Clusters_Top10connectivity_to_targets.png'.format(newClusterGroupDir=newClusterGroupDir,thisk=this_k)
     print('figuresavestring is : ',figuresavestring)
-    plt.savefig(figuresavestring)
+    plt.savefig(figuresavestring, bbox_inches = "tight")
