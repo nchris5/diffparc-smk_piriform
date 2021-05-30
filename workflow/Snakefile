@@ -38,7 +38,7 @@ wildcard_constraints:
     volname='T1',
     target="[a-zA-Z0-9]+"
 
-localrules: all
+localrules: all, all_hcpmmk
 
 #include: 'rules/hcp7T_Diffusion_bedpostx_gpu.smk'
 
